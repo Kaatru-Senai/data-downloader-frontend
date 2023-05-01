@@ -1,8 +1,66 @@
 .ProgressBar{
     width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3%;
+    counter-reset: steps;
+    z-index: 10;
 }
 
 li{
     display: inline-block;
+    width: 200px;
+    text-align: center;
+    position: relative
 }
+
+li:before{
+    content: counter(steps);
+    counter-increment: steps;
+    display: block;
+    width: 40px;
+    height: 40px;
+    border: 1px solid black;
+    margin: 10px auto 10px auto;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 35px;
+    outline: 4px inset red;
+    z-index: 10;
+    background-color: white;
+    color: black;
+}
+
+li:after{
+    content: '';
+    width: 200px;
+    height: 5px;
+    background: #ddd;
+    position: absolute;
+    right: 50%;
+    bottom: 60%;
+    z-index: -10;
+}
+
+li:first-child:after{
+    content: none;
+}
+
+li.active{
+    color: green;
+}
+
+li.active + li:after{
+    background-color: green;
+    color: green;
+}
+
+li.active::after{
+    background-color: green;
+    color: green;
+}
+
+
+
 

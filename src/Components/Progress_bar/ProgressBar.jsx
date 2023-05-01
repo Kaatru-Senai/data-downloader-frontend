@@ -5,11 +5,11 @@ function ProgressBar() {
   return (
     <div className={styles.ProgressBar}>
       <ul>
-        <li>Step 1</li>
-        <li>Step 1</li>
-        <li>Step 1</li>
-        <li>Step 1</li>
-        <li>Step 1</li>
+        <li className={styles.active}>Select Request</li>
+        <li className={styles.active}>Enter Job Id</li>
+        <li>Select Devices</li>
+        <li>Select Format</li>
+        <li>Download Data</li>
       </ul>
     </div>
   )
