@@ -1,0 +1,102 @@
+
+    .select{
+    
+    display: flex;
+    flex-direction: row;
+    margin-top: 5%;
+    margin-left: 8%;
+    z-index: 10;
+    }
+    .search-box input{
+    padding: 10px;
+    }
+    .search-box input::placeholder{
+    color: black;
+    }
+    .search-box input:focus{
+    color: black;
+    }
+    .search-box input
+    {
+    border-color: red;
+    }
+    .dropdown-container{
+    display: inline-block;
+    /* width: 50px; */
+    margin-right: 4rem;
+    z-index: 10;
+    }
+    /* Select{
+    display: inline-block;
+    } */
+    .search-box{
+    display: inline-block;
+    width: 350px;
+    margin-right: 4rem;
+    color: black;
+    
+    
+    }
+    .select .device-type{
+    display: inline-block;
+    font-size: 1.2rem;
+    padding: 7px 20px 7px 20px;
+    background-color: #E9E9E9;;
+    margin-right: 2rem;
+    border-radius: 5px;
+    /* cHECk HerRe To aDd oR rMoVE SomeThInG*/
+    /* box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); */
+    
+    }
+    
+    .select .device-type:hover{
+    background-color:#F2FFA0;
+    transition: 0.3s;
+    cursor: pointer;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+    
+    .card-contain{
+    display: flex;
+    top: 6rem;
+    left: 12.3rem;
+    gap: 10px;
+    margin-right: 8rem;
+    margin-top:5%;
+    padding-left: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 20px;
+    height: 400px;
+    overflow: auto;
+    margin-left: 6%;
+    }
+    
+    .device{
+    display: inline-block;
+    height: 4.4rem;
+    width: 4.4rem;
+    background-color: #878787;
+    border-radius: 8px;
+    margin: 10px 20px 10px 20px;
+    }
+    .device .deviceId{
+    
+    position: relative;
+    top: 1.4rem;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 550;
+    
+    }
+    
+    .select .all-d:hover .card-contain .device{
+    /* background-color: #323B4B;; */
+    background-color: red;;
+    color: red;
+    }
+    
+    .individual_div{
+    background-color: #F2F5FB;
+    height: max-content;
+    }

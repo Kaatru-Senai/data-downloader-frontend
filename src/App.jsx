@@ -3,6 +3,7 @@ import Navbar from './Components/Navbar';
 import { BrowserRouter , Routes, Route  } from 'react-router-dom';
 import Login from './Pages/Login';
 import RequestPage from './Pages/RequestPage';
+import JobInputPage from './Components/JobInput';
 // import JobInputPage from './Pages/JobInputPage';
 
 function App() {

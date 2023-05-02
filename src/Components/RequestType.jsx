@@ -28,7 +28,7 @@ const customStyles = {
   },
 };
 
-function RequestType() {
+function RequestType({nextProgress}) {
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
 
@@ -45,7 +45,7 @@ function RequestType() {
   }
   return (
     <>
-      <div className="w-screen flex flex-row items-center justify-center ml-[0%]">
+      <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[10%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
         </div>
@@ -55,7 +55,7 @@ function RequestType() {
       </div>
       <div className="w-[65vw] h-[45vh] flex justify-center items-center ml-[20%] mr-[20%] mt-[2%]">
         <div className="bg-[#F1F6FF] w-[80%] h-full flex flex-row justify-center items-center flex-auto rounded-lg pl-[20%] pr-[20%] pb-8 pt-8 gap-10">
-          <div className="bg-white h-full basis-1/2 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg">
+          <div className="bg-white h-full basis-1/2 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg" onClick={()=>nextProgress()}>
             <img src={Plus} alt="" width={"40vmin"} />
             <p className="text-center font-semibold">
               New <br></br> Request
