@@ -2,3 +2,13 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 }
+
+.markercluster-map {
+    height: 100%;
+  }
+
+  .Dropdown-control{
+    background-color: #eeeeee !important;
+    border:none !important
+  }
+  

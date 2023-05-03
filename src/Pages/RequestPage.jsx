@@ -5,9 +5,11 @@ import DataType from "../Components/DataType";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import DeviceSelection from "../Components/DeviceSelection";
 import DataInfo from "../Components/DataInfo";
+import DataFormat from "../Components/DataFormat";
+import DatabaseInput from "../Components/DatabaseInput";
 
 function RequestPage() {
-  const [progress, setProgress] = useState(4);
+  const [progress, setProgress] = useState(5);
   const nextProgress=()=>{
     setProgress(progress=>progress+1);
   }
@@ -31,7 +33,11 @@ function RequestPage() {
       }
       {
         progress==4 && 
-        <DataInfo nextProgress={nextProgress}/>
+        <DataFormat nextProgress={nextProgress}/>
+      }
+      {
+        progress==5 && 
+        <DatabaseInput nextProgress={nextProgress}/>
       }
     </div>
   );

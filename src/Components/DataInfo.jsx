@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import calendar from "../assets/calendar.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
-import { MapContainer, TileLayer, useMap, Marker, Popup } from "react-leaflet";
+import { TileLayer, Marker, Popup, MapContainer, Tooltip } from "react-leaflet";
+
 
 function DataInfo() {
-  const position = [51.505, -0.09];
   const [startDate, setStartDate] = useState();
   return (
     <>
@@ -71,18 +71,21 @@ function DataInfo() {
           </div>
         </div>
         <div className="basis-1/3 bg-[#F2F5FB] h-full rounded-lg">
-          <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            <Marker position={position}>
-              <Popup>
-                A pretty CSS3 popup. <br /> Easily customizable.
-              </Popup>
-            </Marker>
-          </MapContainer>
-        </div>
+            <MapContainer center={[12.987109, 80.229081]} zoom={13} scrollWheelZoom={false} className="markercluster-map">
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <Marker position={[12.989283, 80.231484]}>
+                <Popup>
+                  A pretty CSS3 popup. <br /> Easily customizable.
+                </Popup>
+                <Tooltip permanent>
+                        <p>{"S22"}</p>
+                </Tooltip>
+              </Marker>
+            </MapContainer>
+          </div>
       </div>
       <div className="flex w-[80vw] justify-end mt-[2%]">
         <button className="bg-[#323B4B] px-6 py-2 text-white rounded-lg font-semibold">
