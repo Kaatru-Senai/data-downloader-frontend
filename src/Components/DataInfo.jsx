@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import { TileLayer, Marker, Popup, MapContainer, Tooltip } from "react-leaflet";
 
 
-function DataInfo() {
+function DataInfo({nextProgress,previousProgress}) {
   const [startDate, setStartDate] = useState();
   return (
     <>
@@ -88,7 +88,7 @@ function DataInfo() {
           </div>
       </div>
       <div className="flex w-[80vw] justify-end mt-[2%]">
-        <button className="bg-[#323B4B] px-6 py-2 text-white rounded-lg font-semibold">
+        <button className="bg-[#323B4B] px-6 py-2 text-white rounded-lg font-semibold" >
           Continue
         </button>
       </div>

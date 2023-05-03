@@ -7,6 +7,7 @@ import DeviceSelection from "../Components/DeviceSelection";
 import DataInfo from "../Components/DataInfo";
 import DataFormat from "../Components/DataFormat";
 import DatabaseInput from "../Components/DatabaseInput";
+import Download from "../Components/Download";
 
 function RequestPage() {
   const [progress, setProgress] = useState(5);
@@ -21,23 +22,31 @@ function RequestPage() {
       <Navbar />
       {progress>1 && <ProgressBar />}
       {progress==1 &&
-        <RequestType nextProgress={nextProgress}/>
+        <RequestType nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
       {
         progress==2 && 
-        <DataType nextProgress={nextProgress}/>
+        <DataType nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
       {
         progress==3 && 
-        <DeviceSelection nextProgress={nextProgress}/>
+        <DeviceSelection nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
       {
         progress==4 && 
-        <DataFormat nextProgress={nextProgress}/>
+        <DataFormat nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
+      {/* {
+        progress==5 && 
+        <DataFormat nextProgress={nextProgress} previousProgress={previousProgress}/>
+      } */}
       {
         progress==5 && 
-        <DatabaseInput nextProgress={nextProgress}/>
+        <DataInfo nextProgress={nextProgress} previousProgress={previousProgress}/>
+      }
+      {
+        progress==6 && 
+        <Download nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
     </div>
   );

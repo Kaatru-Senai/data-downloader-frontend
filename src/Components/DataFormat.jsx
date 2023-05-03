@@ -6,10 +6,9 @@ import Satelitte from "../assets/st.png";
 import GroundStation from "../assets/gst.png";
 import DatabaseIcon from "../assets/database.svg";
 
-function DataFormat() {
-  //   const [deviceActive, setDeviceActive] = useState(false);
-  //   const [satelliteActive, setSatelliteActive] = useState(false);
-  //   const [groundStationActive, setGroundStationActive] = useState(false);
+function DataFormat({nextProgress,previousProgress}) {
+  const [jsonDataType,setJsonDataType]=useState(true);
+  const [csvDataType,setCsvDataType]=useState(false);
   return (
     <>
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
@@ -36,22 +35,22 @@ function DataFormat() {
       <div className="w-[65vw] h-[35vh] flex justify-center items-center ml-[20%] mr-[20%] mt-[2%]">
         <div className="bg-[#F1F6FF] w-[80%] h-full flex flex-row justify-center items-center flex-auto rounded-lg pl-[5%] pr-[5%] pb-8 pt-8 gap-10">
           <div className="basis-1/2 flex justify-center items-center">
-            <button className="w-full h-auto bg-[#323B4B] py-4 text-white font-semibold rounded-lg">
+            <button className={`w-full h-auto ${jsonDataType?"bg-[#323B4B] text-white":"bg-[#dfdfdf] text-[#8D8D8D]"} py-4 font-semibold rounded-lg`} onClick={()=>{setJsonDataType(true);setCsvDataType(false)}}>
               JSON
             </button>
           </div>
           <div className="basis-1/2 flex justify-center items-center">
-            <button className="w-full h-auto bg-[#DFDFDF] py-4 text-[#8D8D8D] font-semibold rounded-lg">
+            <button className={`w-full h-auto ${csvDataType?"bg-[#323B4B] text-white":"bg-[#dfdfdf] text-[#8D8D8D]"} py-4 font-semibold rounded-lg`} onClick={()=>{setJsonDataType(false);setCsvDataType(true)}}>
               CSV
             </button>
           </div>
         </div>
       </div>
       <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg">
+        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg">
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>
           Continue
         </button>
       </div>

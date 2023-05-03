@@ -5,7 +5,7 @@ import DeviceData from "../assets/Squ.png";
 import Satelitte from "../assets/st.png";
 import GroundStation from "../assets/gst.png";
 
-function DataType() {
+function DataType({nextProgress,previousProgress}) {
   const [deviceActive, setDeviceActive] = useState(false);
   const [satelliteActive, setSatelliteActive] = useState(false);
   const [groundStationActive, setGroundStationActive] = useState(false);
@@ -95,8 +95,11 @@ function DataType() {
           </div>
         </div>
       </div>
-      <div className="flex w-[80vw] justify-end mt-[2%]">
-        <button className="bg-[#323B4B] px-6 py-2 text-white rounded-lg font-semibold">
+      <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
+        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>
+          Back
+        </button>
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>
           Continue
         </button>
       </div>

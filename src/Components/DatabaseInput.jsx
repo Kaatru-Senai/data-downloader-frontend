@@ -3,7 +3,7 @@ import DatabaseIcon from "../assets/database.svg";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
-function DatabaseInput() {
+function DatabaseInput({nextProgress,previousProgress}) {
   const databaseName=useRef();
   const options = [
     'one', 'two', 'three'
@@ -34,10 +34,10 @@ function DatabaseInput() {
       </div>
       
       <div className="w-[80%] fixed bottom-4 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg">
+        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg">
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>
           Continue
         </button>
       </div>

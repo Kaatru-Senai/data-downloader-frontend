@@ -31,7 +31,7 @@ var Data = [
   },
 ];
 
-const DeviceSelection = () => {
+const DeviceSelection = ({nextProgress,previousProgress}) => {
   const navigate = useNavigate();
 
   const Location = useLocation();
@@ -362,8 +362,8 @@ const DeviceSelection = () => {
         </div>
       </div>
       <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg">Back</button>
-          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg">Continue</button>
+          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>Back</button>
+          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>Continue</button>
       </div>
     </>
   );
