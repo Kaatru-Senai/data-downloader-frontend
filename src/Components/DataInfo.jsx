@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import calendar from "../assets/calendar.svg";
 import "react-datepicker/dist/react-datepicker.css";
@@ -5,7 +6,7 @@ import DatePicker from "react-datepicker";
 import { TileLayer, Marker, Popup, MapContainer, Tooltip } from "react-leaflet";
 
 
-function DataInfo({nextProgress,previousProgress}) {
+function DataInfo({setProgress}) {
   const [startDate, setStartDate] = useState();
   return (
     <>
@@ -87,10 +88,8 @@ function DataInfo({nextProgress,previousProgress}) {
             </MapContainer>
           </div>
       </div>
-      <div className="flex w-[80vw] justify-end mt-[2%]">
-        <button className="bg-[#323B4B] px-6 py-2 text-white rounded-lg font-semibold" >
-          Continue
-        </button>
+      <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
+          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>setProgress(3)}>Continue</button>
       </div>
     </>
   );

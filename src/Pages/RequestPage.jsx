@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
 import RequestType from "../Components/RequestType";
-import DataType from "../Components/DataType";
+import DataSource from "../Components/DataSource";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import DeviceSelection from "../Components/DeviceSelection";
 import DataInfo from "../Components/DataInfo";
 import DataFormat from "../Components/DataFormat";
-import DatabaseInput from "../Components/DatabaseInput";
 import Download from "../Components/Download";
+import DatabaseInput from "../Components/DatabaseInput";
 
 function RequestPage() {
-  const [progress, setProgress] = useState(5);
+  
+  const [progress, setProgress] = useState(1);
   const nextProgress=()=>{
     setProgress(progress=>progress+1);
   }
@@ -26,23 +27,23 @@ function RequestPage() {
       }
       {
         progress==2 && 
-        <DataType nextProgress={nextProgress} previousProgress={previousProgress}/>
+        <DataSource nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
       {
         progress==3 && 
-        <DeviceSelection nextProgress={nextProgress} previousProgress={previousProgress}/>
+        <DeviceSelection nextProgress={nextProgress} setProgress={setProgress} previousProgress={previousProgress}/>
       }
       {
         progress==4 && 
         <DataFormat nextProgress={nextProgress} previousProgress={previousProgress}/>
       }
-      {/* {
-        progress==5 && 
-        <DataFormat nextProgress={nextProgress} previousProgress={previousProgress}/>
-      } */}
       {
         progress==5 && 
-        <DataInfo nextProgress={nextProgress} previousProgress={previousProgress}/>
+        <DatabaseInput nextProgress={nextProgress} previousProgress={previousProgress}/>
+      }
+      {
+        progress==10 && 
+        <DataInfo nextProgress={nextProgress} setProgress={setProgress} previousProgress={previousProgress}/>
       }
       {
         progress==6 && 

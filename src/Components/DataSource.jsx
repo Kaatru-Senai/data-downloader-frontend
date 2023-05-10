@@ -1,11 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import Plus from "../assets/Vector (1).svg";
-import Search from "../assets/Search_request.png";
 import DeviceData from "../assets/Squ.png";
 import Satelitte from "../assets/st.png";
 import GroundStation from "../assets/gst.png";
 
-function DataType({nextProgress,previousProgress}) {
+function DataSource({nextProgress,previousProgress}) {
   const [deviceActive, setDeviceActive] = useState(false);
   const [satelliteActive, setSatelliteActive] = useState(false);
   const [groundStationActive, setGroundStationActive] = useState(false);
@@ -107,4 +106,4 @@ function DataType({nextProgress,previousProgress}) {
   );
 }
 
-export default DataType;
+export default DataSource;

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useRef, useState } from "react";
 import DatabaseIcon from "../assets/database.svg";
 import Dropdown from 'react-dropdown';
@@ -8,6 +9,7 @@ function DatabaseInput({nextProgress,previousProgress}) {
   const options = [
     'one', 'two', 'three'
   ];    
+  console.log(databaseName)
   const [Option,SetOption] = useState(options[0]);
   return (
     <>

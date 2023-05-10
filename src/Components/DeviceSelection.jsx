@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+// import { useNavigate, useLocation } from "react-router-dom";
 import Search from "../assets/Search.svg";
 
 const DeviceImage = (props) => {
@@ -31,10 +32,9 @@ var Data = [
   },
 ];
 
-const DeviceSelection = ({nextProgress,previousProgress}) => {
-  const navigate = useNavigate();
-
-  const Location = useLocation();
+const DeviceSelection = ({nextProgress,previousProgress,setProgress}) => {
+  // const navigate = useNavigate();
+  // const Location = useLocation();
   const [state, setState] = React.useState(false);
   const [clickAll, setCA] = React.useState(false);
 
@@ -46,67 +46,67 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
   const [color, setColor] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = React.useState({});
 
-  let data, bData;
-  try {
-    data = JSON.parse(Location.state["data"]);
-    // console.log(data);
-  } catch (error) {
-    console.log("page2: " + error);
-  }
-  bData = data;
+  // let data, bData;
+  // try {
+  //   data = JSON.parse(Location.state["data"]);
+  //   // console.log(data);
+  // } catch (error) {
+  //   console.log("page2: " + error);
+  // }
+  // bData = data;
 
-  const ToString = (arr) => {
-    var x = arr[0];
-    for (var i = 1; i < arr.length; i++) {
-      x += "," + arr[i];
-    }
-    return x;
-  };
+  // const ToString = (arr) => {
+  //   var x = arr[0];
+  //   for (var i = 1; i < arr.length; i++) {
+  //     x += "," + arr[i];
+  //   }
+  //   return x;
+  // };
 
-  const Front = () => {
-    if (clickAll) {
-      try {
-        data["DeviceIds"] = Data;
-        data["DeviceIds"] = ToString(data["DeviceIds"]);
-        navigate("/select-sensor", {
-          state: { data: JSON.stringify(data) },
-        });
-      } catch (error) {
-        console.log("page2" + error);
-      }
-    } else if (clickAllm) {
-      try {
-        data["DeviceIds"] = Data.filter((temp) => {
-          return temp[0] === "m";
-        });
-        data["DeviceIds"] = ToString(data["DeviceIds"]);
+  // const Front = () => {
+  //   if (clickAll) {
+  //     try {
+  //       data["DeviceIds"] = Data;
+  //       data["DeviceIds"] = ToString(data["DeviceIds"]);
+  //       navigate("/select-sensor", {
+  //         state: { data: JSON.stringify(data) },
+  //       });
+  //     } catch (error) {
+  //       console.log("page2" + error);
+  //     }
+  //   } else if (clickAllm) {
+  //     try {
+  //       data["DeviceIds"] = Data.filter((temp) => {
+  //         return temp[0] === "m";
+  //       });
+  //       data["DeviceIds"] = ToString(data["DeviceIds"]);
 
-        navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (clickAlls) {
-      try {
-        data["DeviceIds"] = Data.filter((temp) => {
-          return temp[0] === "s";
-        });
-        data["DeviceIds"] = ToString(data["DeviceIds"]);
-        navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (selectedOptions.length > 0) {
-      let x = selectedOptions;
-      data["DeviceIds"] = x;
-      navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-    } else {
-      alert("please Select one option to go another page");
-    }
-  };
+  //       navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else if (clickAlls) {
+  //     try {
+  //       data["DeviceIds"] = Data.filter((temp) => {
+  //         return temp[0] === "s";
+  //       });
+  //       data["DeviceIds"] = ToString(data["DeviceIds"]);
+  //       navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else if (selectedOptions.length > 0) {
+  //     let x = selectedOptions;
+  //     data["DeviceIds"] = x;
+  //     navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
+  //   } else {
+  //     alert("please Select one option to go another page");
+  //   }
+  // };
 
-  const Back = () => {
-    navigate("/select-data-source", { state: { data: JSON.stringify(bData) } });
-  };
+  // const Back = () => {
+  //   navigate("/select-data-source", { state: { data: JSON.stringify(bData) } });
+  // };
 
   const validateConvert = (data) => {
     data = data.toUpperCase();
@@ -144,8 +144,8 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
             if (from > to) {
               [from, to] = [to, from];
             }
-            for (var i = from; i <= to; i++) {
-              res += x[0] + `${i},`;
+            for (var j = from; j <= to; j++) {
+              res += x[0] + `${j},`;
             }
           } else {
             return false;
@@ -234,6 +234,7 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
             />
           </div>
           <div className="flex flex-row justify-center items-center gap-4 basis-4/6">
+            <button className="p-3 bg-[#323B4B] text-white rounded-md" onClick={()=>setProgress(10)}>Device Stats</button>
             <div
               style={{
                 backgroundColor:
@@ -303,7 +304,7 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
           {Data?.map((item) => {
             if (item.items.length > 0) {
               return (
-                <div className="h-max bg-[#F2F5FB] flex flex-wrap gap-4 p-4 rounded-lg">
+                <div className="h-max bg-[#F2F5FB] flex flex-wrap gap-4 p-4 rounded-lg" key={item}>
                   {!clickAll &&
                   !clickAllm &&
                   !clickAlls &&
