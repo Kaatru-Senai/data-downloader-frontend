@@ -50,7 +50,7 @@ function Login() {
               </div>
               <div className="flex w-[90%] flex-col justify-center items-center gap-10">
               <a href="/forgotPassword" className="text-[#B7B7B7] underline">forgot password ?</a>
-              <button className="bg-[#B5FFB4] w-[40%] py-2 rounded-lg" onClick={()=>{navigate('select-request');dispatch(setUser(true));}}>Login</button>
+              <button className="bg-[#B5FFB4] w-[40%] py-2 rounded-lg" onClick={()=>{navigate('select-request');dispatch(setUser(true));localStorage.setItem("user",true);}}>Login</button>
             </div>
             </div>
             

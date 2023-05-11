@@ -10,11 +10,13 @@ import DataSource from './Pages/DataSource';
 import DeviceSelection from './Pages/DeviceSelection';
 import { useSelector } from 'react-redux';
 import DataInfo from './Components/DataInfo';
+import History from './Pages/History';
 // import { useEffect } from 'react';
 // import JobInputPage from './Pages/JobInputPage';
 
 function App() {
   const isUser=useSelector((state)=>state.data.isUser);
+  console.log(isUser);
   return (
     <div className="App">
       <BrowserRouter>
@@ -27,6 +29,7 @@ function App() {
             <Route path='/select-database' element={isUser?<DatabaseInput/>:<Navigate to="/"/>}/>
             <Route path='/download' element={isUser?<Download/>:<Navigate to="/"/>}/>
             <Route path='/device-stats' element={isUser?<DataInfo/>:<Navigate to="/"/>}/>
+            <Route path='/history' element={isUser?<History/>:<Navigate to="/"/>}/>
           </Routes>
       </BrowserRouter>
     </div>

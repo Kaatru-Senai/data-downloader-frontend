@@ -2,13 +2,23 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
+import { useRive,Layout,Fit,Alignment } from "@rive-app/react-canvas";
+import RiveAnimation from '../assets/liquid_download.riv';
 
 function Download() {
+  const { rive, RiveComponent } = useRive({
+    src: RiveAnimation,
+    autoplay: false,
+    layout: new Layout({
+      fit: Fit.Cover,
+      alignment: Alignment.Center,
+    }),
+  });
   const navigate = useNavigate();
   return (
     <div className="min-h-screen flex flex-col items-center">
-    <Navbar/>
-    <ProgressBar/>
+      <Navbar />
+      <ProgressBar />
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center"></div>
         <div className="basis-4/5 flex-auto p-4 bg-[#B5FFB4] rounded-tl-lg rounded-bl-lg">
@@ -19,7 +29,10 @@ function Download() {
         <div className="basis-[10%] text-center h-full"></div>
         <div className="flex flex-row justify-between h-[80%] items-start flex-auto mr-[2%] gap-4">
           <div className="basis-[20%]  bg-[#F2F5FB] flex-auto h-full">
-            Download Animation Here
+            <RiveComponent
+              onClick={() => rive && rive.play()}
+              onMouseLeave={() => rive && rive.pause()}
+            />
           </div>
           <div className="bg-[#F2F5FB] flex-auto h-full flex flex-col p-2 font-semibold text-[3vmin]">
             <div className="p-2 border-b-4 border-dashed">
@@ -55,13 +68,18 @@ function Download() {
               </div>
             </div>
             <div className="flex flex-row justify-end items-center">
-                <button className="px-2 py-1 bg-[#323B4B] text-white rounded-lg">Download</button>
-              </div>
+              <button className="px-2 py-1 bg-[#323B4B] text-white rounded-lg">
+                Download
+              </button>
+            </div>
           </div>
         </div>
       </div>
       <div className="w-[80%] fixed bottom-1 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-database')}>
+        <button
+          className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg"
+          onClick={() => navigate("/select-database")}
+        >
           Back
         </button>
       </div>

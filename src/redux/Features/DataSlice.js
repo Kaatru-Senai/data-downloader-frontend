@@ -1,9 +1,11 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+const user=localStorage.getItem('user');
+
 export const DataSlice = createSlice({
   name: 'data',
   initialState: {
-    isUser: false,
+    isUser: user,
   },
   reducers: {
     setUser: (state, action) => {
