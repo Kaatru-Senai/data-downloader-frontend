@@ -3,13 +3,19 @@ import React, { useState } from "react";
 import DeviceData from "../assets/Squ.png";
 import Satelitte from "../assets/st.png";
 import GroundStation from "../assets/gst.png";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
+import ProgressBar from "../Components/Progress_bar/ProgressBar";
 
-function DataSource({nextProgress,previousProgress}) {
+function DataSource() {
+  const navigate = useNavigate();
   const [deviceActive, setDeviceActive] = useState(false);
   const [satelliteActive, setSatelliteActive] = useState(false);
   const [groundStationActive, setGroundStationActive] = useState(false);
   return (
-    <>
+    <div className="min-h-screen flex flex-col items-center">
+    <Navbar />
+    <ProgressBar/>
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
@@ -95,14 +101,14 @@ function DataSource({nextProgress,previousProgress}) {
         </div>
       </div>
       <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>
+        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-request')}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-devices')}>
           Continue
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

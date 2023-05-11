@@ -1,7 +1,9 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-// import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Search from "../assets/Search.svg";
+import Navbar from "../Components/Navbar";
+import ProgressBar from "../Components/Progress_bar/ProgressBar";
 
 const DeviceImage = (props) => {
   return (
@@ -32,8 +34,8 @@ var Data = [
   },
 ];
 
-const DeviceSelection = ({nextProgress,previousProgress,setProgress}) => {
-  // const navigate = useNavigate();
+const DeviceSelection = () => {
+  const navigate = useNavigate();
   // const Location = useLocation();
   const [state, setState] = React.useState(false);
   const [clickAll, setCA] = React.useState(false);
@@ -187,7 +189,9 @@ const DeviceSelection = ({nextProgress,previousProgress,setProgress}) => {
     return res;
   };
   return (
-    <>
+    <div className="min-h-screen flex flex-col items-center">
+    <Navbar />
+    <ProgressBar/>
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
@@ -234,7 +238,7 @@ const DeviceSelection = ({nextProgress,previousProgress,setProgress}) => {
             />
           </div>
           <div className="flex flex-row justify-center items-center gap-4 basis-4/6">
-            <button className="p-3 bg-[#323B4B] text-white rounded-md" onClick={()=>setProgress(10)}>Device Stats</button>
+            <button className="p-3 bg-[#323B4B] text-white rounded-md" onClick={()=>navigate('/device-stats')}>Device Stats</button>
             <div
               style={{
                 backgroundColor:
@@ -363,10 +367,10 @@ const DeviceSelection = ({nextProgress,previousProgress,setProgress}) => {
         </div>
       </div>
       <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>Back</button>
-          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>Continue</button>
+          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-datasource')}>Back</button>
+          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-datatype')}>Continue</button>
       </div>
-    </>
+    </div>
   );
 };
 

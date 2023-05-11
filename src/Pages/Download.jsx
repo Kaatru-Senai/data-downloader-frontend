@@ -1,8 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../Components/Navbar";
+import ProgressBar from "../Components/Progress_bar/ProgressBar";
 
-function Download({nextProgress,previousProgress}) {
+function Download() {
+  const navigate = useNavigate();
   return (
-    <>
+    <div className="min-h-screen flex flex-col items-center">
+    <Navbar/>
+    <ProgressBar/>
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center"></div>
         <div className="basis-4/5 flex-auto p-4 bg-[#B5FFB4] rounded-tl-lg rounded-bl-lg">
@@ -55,11 +61,11 @@ function Download({nextProgress,previousProgress}) {
         </div>
       </div>
       <div className="w-[80%] fixed bottom-1 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>
+        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-database')}>
           Back
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

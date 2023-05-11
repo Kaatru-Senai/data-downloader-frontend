@@ -3,8 +3,12 @@ import React, { useRef, useState } from "react";
 import DatabaseIcon from "../assets/database.svg";
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+import Navbar from "../Components/Navbar";
+import ProgressBar from "../Components/Progress_bar/ProgressBar";
+import { useNavigate } from "react-router-dom";
 
-function DatabaseInput({nextProgress,previousProgress}) {
+function DatabaseInput() {
+  const navigate=useNavigate();
   const databaseName=useRef();
   const options = [
     'one', 'two', 'three'
@@ -12,7 +16,9 @@ function DatabaseInput({nextProgress,previousProgress}) {
   console.log(databaseName)
   const [Option,SetOption] = useState(options[0]);
   return (
-    <>
+    <div className="min-h-screen flex flex-col items-center">
+    <Navbar/>
+    <ProgressBar/>
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
@@ -36,14 +42,14 @@ function DatabaseInput({nextProgress,previousProgress}) {
       </div>
       
       <div className="w-[80%] fixed bottom-4 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>
+        <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-datatype')}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/download')}>
           Continue
         </button>
       </div>
-    </>
+    </div>
   );
 }
 

@@ -4,12 +4,18 @@ import calendar from "../assets/calendar.svg";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { TileLayer, Marker, Popup, MapContainer, Tooltip } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
+import ProgressBar from "./Progress_bar/ProgressBar";
 
 
-function DataInfo({setProgress}) {
+function DataInfo() {
+  const navigate =useNavigate();
   const [startDate, setStartDate] = useState();
   return (
-    <>
+    <div className="min-h-screen flex flex-col items-center">
+    <Navbar/>
+    <ProgressBar/>
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
@@ -89,9 +95,9 @@ function DataInfo({setProgress}) {
           </div>
       </div>
       <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>setProgress(3)}>Continue</button>
+          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-devices')}>Continue</button>
       </div>
-    </>
+    </div>
   );
 }
 
