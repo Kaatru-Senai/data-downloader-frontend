@@ -6,8 +6,11 @@ import GroundStation from "../assets/gst.png";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
+import { useDispatch } from "react-redux";
+import { setDataSource } from "../redux/Features/DataSlice";
 
 function DataSource() {
+  const dispatch=useDispatch();
   const navigate = useNavigate();
   const [deviceActive, setDeviceActive] = useState(false);
   const [satelliteActive, setSatelliteActive] = useState(false);
@@ -31,6 +34,7 @@ function DataSource() {
               deviceActive ? "bg-[#323B4B]" : "bg-white"
             } relative h-full basis-1/3 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg`}
             onClick={() => {
+              dispatch(setDataSource("DD"))
               setDeviceActive(true);
               setGroundStationActive(false);
               setSatelliteActive(false);
@@ -55,6 +59,7 @@ function DataSource() {
               satelliteActive ? "bg-[#323B4B]" : "bg-white"
             } relative h-full basis-1/3 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg`}
             onClick={() => {
+              dispatch(setDataSource("SD"))
               setDeviceActive(false);
               setGroundStationActive(false);
               setSatelliteActive(true);
@@ -79,6 +84,7 @@ function DataSource() {
               groundStationActive ? "bg-[#323B4B]" : "bg-white"
             } relative h-full basis-1/3 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg`}
             onClick={() => {
+              dispatch(setDataSource("GSD"))
               setDeviceActive(false);
               setGroundStationActive(true);
               setSatelliteActive(false);
@@ -104,7 +110,7 @@ function DataSource() {
         <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-request')}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-devices')}>
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-dates')}>
           Continue
         </button>
       </div>

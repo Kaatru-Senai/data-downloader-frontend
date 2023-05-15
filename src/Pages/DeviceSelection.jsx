@@ -1,9 +1,12 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../assets/Search.svg";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
+import { useDispatch } from "react-redux";
+import { setDeviceSelected } from "../redux/Features/DataSlice";
 
 const DeviceImage = (props) => {
   return (
@@ -35,6 +38,9 @@ var Data = [
 ];
 
 const DeviceSelection = () => {
+  const dispatch=useDispatch();
+  const inputRef = useRef();
+  // const [Data,setData]=useState([])
   const navigate = useNavigate();
   // const Location = useLocation();
   const [state, setState] = React.useState(false);
@@ -213,13 +219,18 @@ const DeviceSelection = () => {
                 fontSize: "20px",
                 borderRadius: "5px",
               }}
+              ref={inputRef}
               className="border-none focus:outline-none px-4 bg-[#eeeeee]" /*options={optionList}*/
               placeholder="e.g. s1-s10,m3-m5"
               onChange={(data) => {
                 let len = data.target.value.length;
-
+                Data[0].items=[];
+                Data[1].items=[];
+                Data[2].items=[];
+                Data[3].items=[];
                 if (len > 0) {
                   let x = validateConvert(data.target.value);
+                  console.log(x)
                   if (len && x !== false) {
                     setSelectedOptions(x);
                     setCA(false);
@@ -230,15 +241,15 @@ const DeviceSelection = () => {
                     setColor(true);
                   }
                 } else if (len === 0) {
-                  Data[0].items.length = 0;
-                  Data[1].items.length = 0;
-                  Data[2].items.length = 0;
+                  Data[0].items=[];
+                  Data[1].items=[];
+                  Data[2].items=[];
+                  Data[3].items=[];
                 }
               }}
             />
           </div>
           <div className="flex flex-row justify-center items-center gap-4 basis-4/6">
-            <button className="p-3 bg-[#323B4B] text-white rounded-md" onClick={()=>navigate('/device-stats')}>Device Stats</button>
             <div
               style={{
                 backgroundColor:
@@ -305,11 +316,25 @@ const DeviceSelection = () => {
       <div className="w-screen ml-[0%] flex justify-center items-center mr-[5%]">
         <div className="basis-[10%] h-20"></div>
         <div className="flex basis-4/5 flex-auto p-4 h-full gap-4 overflow-auto">
-          {Data?.map((item) => {
+          {Data?.map((item,index) => {
             if (item.items.length > 0) {
               return (
-                <div className="h-max bg-[#F2F5FB] flex flex-wrap gap-4 p-4 rounded-lg" key={item}>
-                  {!clickAll &&
+                <div className="h-max bg-[#F2F5FB] flex flex-wrap gap-4 p-4 rounded-lg" key={index}>
+                  {
+                    item.items?.map((user) => (
+                      <DeviceImage
+                        key={user}
+                        bcolor={
+                          selectedOptions.includes(user.toUpperCase())
+                            ? "#323B4B"
+                            : "#878787"
+                        }
+                        deivceId={user}
+                        mobility={user[0]}
+                      />
+                    ))
+                  }
+                  {/* {!clickAll &&
                   !clickAllm &&
                   !clickAlls &&
                   selectedOptions.length > 0
@@ -359,7 +384,7 @@ const DeviceSelection = () => {
                           deivceId={user}
                           mobility={user[0]}
                         />
-                      ))}
+                      ))} */}
                 </div>
               );
             }
@@ -367,8 +392,8 @@ const DeviceSelection = () => {
         </div>
       </div>
       <div className="w-[80%] fixed bottom-0 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-datasource')}>Back</button>
-          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-datatype')}>Continue</button>
+          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-dates')}>Back</button>
+          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>{navigate('/select-datatype');dispatch(setDeviceSelected(inputRef.current.value))}}>Continue</button>
       </div>
     </div>
   );

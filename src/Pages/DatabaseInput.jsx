@@ -6,8 +6,11 @@ import 'react-dropdown/style.css';
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setDBName } from "../redux/Features/DataSlice";
 
 function DatabaseInput() {
+  const dispatch=useDispatch();
   const navigate=useNavigate();
   const databaseName=useRef();
   const options = [
@@ -45,7 +48,7 @@ function DatabaseInput() {
         <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-datatype')}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/download')}>
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>{navigate('/download');dispatch(setDBName(Option.value))}}>
           Continue
         </button>
       </div>

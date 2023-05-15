@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
+import { useDispatch } from "react-redux";
+import { setDataFormat } from "../redux/Features/DataSlice";
 
 
 function DataFormat() {
+  const dispatch=useDispatch();
   const navigate = useNavigate();
   const [jsonDataType,setJsonDataType]=useState(true);
   const [csvDataType,setCsvDataType]=useState(false);
@@ -23,12 +26,12 @@ function DataFormat() {
       <div className="w-[65vw] h-[35vh] flex justify-center items-center ml-[20%] mr-[20%] mt-[2%]">
         <div className="bg-[#F1F6FF] w-[80%] h-full flex flex-row justify-center items-center flex-auto rounded-lg pl-[5%] pr-[5%] pb-8 pt-8 gap-10">
           <div className="basis-1/2 flex justify-center items-center">
-            <button className={`w-full h-auto ${jsonDataType?"bg-[#323B4B] text-white":"bg-[#dfdfdf] text-[#8D8D8D]"} py-4 font-semibold rounded-lg`} onClick={()=>{setJsonDataType(true);setCsvDataType(false)}}>
+            <button className={`w-full h-auto ${jsonDataType?"bg-[#323B4B] text-white":"bg-[#dfdfdf] text-[#8D8D8D]"} py-4 font-semibold rounded-lg`} onClick={()=>{setJsonDataType(true);setCsvDataType(false);dispatch(setDataFormat("JSON"))}}>
               JSON
             </button>
           </div>
           <div className="basis-1/2 flex justify-center items-center">
-            <button className={`w-full h-auto ${csvDataType?"bg-[#323B4B] text-white":"bg-[#dfdfdf] text-[#8D8D8D]"} py-4 font-semibold rounded-lg`} onClick={()=>{setJsonDataType(false);setCsvDataType(true)}}>
+            <button className={`w-full h-auto ${csvDataType?"bg-[#323B4B] text-white":"bg-[#dfdfdf] text-[#8D8D8D]"} py-4 font-semibold rounded-lg`} onClick={()=>{setJsonDataType(false);setCsvDataType(true);dispatch(setDataFormat("CSV"))}}>
               CSV
             </button>
           </div>
