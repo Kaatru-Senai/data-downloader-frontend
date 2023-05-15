@@ -304,7 +304,7 @@ const DeviceSelection = () => {
       </div>
       <div className="w-screen ml-[0%] flex justify-center items-center mr-[5%]">
         <div className="basis-[10%] h-20"></div>
-        <div className="flex basis-4/5 flex-auto p-4 h-[400px] gap-4 overflow-auto">
+        <div className="flex basis-4/5 flex-auto p-4 h-full gap-4 overflow-auto">
           {Data?.map((item) => {
             if (item.items.length > 0) {
               return (
@@ -366,7 +366,7 @@ const DeviceSelection = () => {
           })}
         </div>
       </div>
-      <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
+      <div className="w-[80%] fixed bottom-0 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
           <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-datasource')}>Back</button>
           <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-datatype')}>Continue</button>
       </div>

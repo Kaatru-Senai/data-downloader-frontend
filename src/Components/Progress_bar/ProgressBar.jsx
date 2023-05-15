@@ -1,7 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './ProgressBar.module.css'
 
 function ProgressBar() {
+  useEffect(()=>{
+    
+  },[])
   return (
     <div className={styles.ProgressBar}>
       <ul>
