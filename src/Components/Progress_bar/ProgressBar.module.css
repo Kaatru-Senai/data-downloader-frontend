@@ -65,6 +65,9 @@ ul > li.active ~ li:after{
     background-color: #75f85e;
     color:green;
 }
+ul > li.active ~ li:before{
+    outline: 4px inset #75f85e;
+}
 ul > li.active ~ li{
     color:green;
 }

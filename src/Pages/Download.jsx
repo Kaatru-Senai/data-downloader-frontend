@@ -4,17 +4,27 @@ import Navbar from "../Components/Navbar";
 // import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import { useRive,Layout,Fit,Alignment } from "@rive-app/react-canvas";
 import RiveAnimation from '../assets/liquid_download.riv';
+import { useSelector } from "react-redux";
 
 function Download() {
+  const data=useSelector((state)=>state.data.newRequest);
   const { rive, RiveComponent } = useRive({
     src: RiveAnimation,
-    autoplay: false,
     layout: new Layout({
       fit: Fit.Cover,
       alignment: Alignment.Center,
     }),
+    stateMachines: 'State machine 1',
+    autoplay: false,
+    onLoop:false,
   });
   const navigate = useNavigate();
+  const startAnimation=()=>{
+    let inputs = rive.stateMachineInputs("State machine 1");
+    console.log(inputs);
+    const bumpTrigger = inputs.find(i => i.name === 'Downloading');
+    bumpTrigger.value = false;
+  }
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Navbar />
@@ -28,10 +38,7 @@ function Download() {
         <div className="basis-[10%] text-center h-full"></div>
         <div className="flex flex-row justify-between h-[80%] items-start flex-auto mr-[2%] gap-4">
           <div className="basis-[30%]  bg-[#F2F5FB] flex-auto h-full">
-            <RiveComponent
-              onClick={() => rive && rive.play()}
-              onMouseLeave={() => rive && rive.pause()}
-            />
+            <RiveComponent />
           </div>
           <div className="bg-[#F2F5FB] flex-auto h-full flex flex-col p-2 font-semibold text-[3vmin]">
             <div className="p-2 text-center">
@@ -53,20 +60,20 @@ function Download() {
                 </div>
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">From Date :</p>
-                  <p className="font-normal">10/08/2001</p>
+                  <p className="font-normal">{data.from.toLocaleString().split(',')[0]}</p>
                 </div>
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">To Date :</p>
-                  <p className="font-normal">10/09/2001</p>
+                  <p className="font-normal">{data.from.toLocaleString().split(',')[0]}</p>
                 </div>
               
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">File Type : </p>
-                  <p className="font-normal">CSV</p>
+                  <p className="font-normal">{data.dataFormat}</p>
                 </div>
                 <div className="flex flex-row  justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">Sensors: </p>
-                  <p className="font-normal">M22-M29,S12-S22,LM21-LM30</p>
+                  <p className="font-normal">{data.deviceSelected}</p>
                 </div>
                 <div className="flex flex-row justify-between w-full p-1">
                   <p className="font-semibold">Status: </p>
@@ -82,11 +89,11 @@ function Download() {
       <div className="w-[80%] fixed bottom-1 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
         <button
           className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg"
-          onClick={() => navigate("/select-database")}
+          onClick={() => navigate("/select-datatype")}
         >
           Back
         </button>
-        <button className="px-4 py-2 bg-[#323B4B] text-white rounded-lg">
+        <button className="px-4 py-2 bg-[#323B4B] text-white rounded-lg" onClick={startAnimation}>
                 Download
         </button>
       </div>

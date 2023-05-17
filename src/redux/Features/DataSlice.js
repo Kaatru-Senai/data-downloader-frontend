@@ -8,12 +8,13 @@ export const DataSlice = createSlice({
     isUser: user,
     newRequest:{
       dataSource:"",
-      deviceSelected:"",
-      dataFormat:"",
+      deviceSelected:null,
+      dataFormat:"JSON",
       dbName:"",
       from:"",
       to:""
-    }
+    },
+    backend:false
   },
   reducers: {
     setUser: (state, action) => {

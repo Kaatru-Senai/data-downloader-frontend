@@ -41,7 +41,9 @@ function DataFormat() {
         <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={()=>navigate('/select-devices')}>
           Back
         </button>
-        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>navigate('/select-database')}>
+        <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={()=>{
+            navigate('/download');
+        }}>
           Continue
         </button>
       </div>

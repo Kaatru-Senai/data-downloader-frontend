@@ -1,0 +1,20 @@
+export const databaseList=[
+    {
+        "dbname":"colloc4"
+    },
+    {
+        "dbname":"colloc2"
+    },
+    {
+        "dbname":"colloc1"
+    },
+    {
+        "dbname":"colloc3"
+    },
+    {
+        "dbname":"admin"
+    },
+    {
+        "dbname":"north_chennai"
+    },
+]
