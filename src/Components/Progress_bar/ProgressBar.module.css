@@ -14,7 +14,7 @@ li{
     width: 200px;
     text-align: center;
     position: relative;
-    color:red
+    color:rgb(194, 193, 193)
 }
 
 li:before{
@@ -28,7 +28,7 @@ li:before{
     text-align: center;
     border-radius: 50%;
     line-height: 35px;
-    outline: 4px inset red;
+    outline: 4px inset rgb(194, 193, 193);
     z-index: 10;
     background-color: white;
     color: black;

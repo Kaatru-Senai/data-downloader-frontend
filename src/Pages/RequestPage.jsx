@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import Plus from "../assets/Vector (1).svg";
 import Search from "../assets/Search_request.png";
 import Modal from "react-modal";
@@ -6,6 +6,11 @@ import { AiOutlineClose } from "react-icons/ai";
 import JobId from "../assets/job_id.svg";
 import Navbar from "../Components/Navbar";
 import { useNavigate } from "react-router-dom";
+import { getJobIdData } from "../Mock_Backend/server";
+import { useDispatch } from "react-redux";
+import { setJobData } from "../redux/Features/DataSlice";
+import 'react-toastify/dist/ReactToastify.css';
+import {ToastContainer, toast} from 'react-toastify';
 
 const customStyles = {
   overlay: {
@@ -31,9 +36,11 @@ const customStyles = {
 };
 
 function RequestPage() {
+  const jobRef=useRef();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = React.useState(false);
-
+  const showNotify = () => toast('The job Id you entered is wrong Please Check again...');
   function openModal() {
     setIsOpen(true);
   }
@@ -44,6 +51,19 @@ function RequestPage() {
 
   function closeModal() {
     setIsOpen(false);
+  }
+
+  const getDataForJobID=async()=>{
+    const getAllData= await getJobIdData(jobRef.current.value);
+    if(getAllData.status===500){
+      showNotify();
+    }
+    else{
+    console.log(getAllData)
+    closeModal();
+    dispatch(setJobData(getAllData));
+    navigate('/download');
+    }
   }
   return (
     <div className="min-h-screen flex flex-col items-center">
@@ -98,7 +118,7 @@ function RequestPage() {
           <div className="flex flex-row justify-center items-center border-2 pl-2 rounded-lg">
             <img src={JobId} alt="" width={"35vmin"} />
             <div className="h-full w-4 bg-black"></div>
-            <input type="text" name="" id="" className="p-2 focus:outline-0" />
+            <input type="text" name="" id="" className="p-2 focus:outline-0" ref={jobRef}/>
           </div>
         </div>
           <div className="w-full flex-auto flex flex-row justify-end p-4 items-end mb-[4%] pr-[4%]">
@@ -106,8 +126,7 @@ function RequestPage() {
               type="submit"
               className="w-auto h-min bg-[#323B4B] text-white px-8 py-3 rounded-lg"
               onClick={() => {
-                closeModal();
-                navigate('/download');
+                getDataForJobID();
               }}
             >
               Submit
@@ -115,6 +134,7 @@ function RequestPage() {
           </div>
         </div>
       </Modal>
+      <ToastContainer position="top-right" closeOnClick autoClose={false}/>
     </div>
   );
 }

@@ -1,12 +1,40 @@
 import { response } from "./data";
 import { databaseList } from "./databaselist";
 import { deviceCount } from "./deviceCount";
+import { history } from "./history";
+import { jobDetails } from "./jobId";
 
 
 export const getMarkers = async () => {
     const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     await delay(100);
     return response;
+};
+
+export const getFile = async () => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(10000);
+    return response;
+};
+
+export const getHistory = async () => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(1000);
+    return history;
+};
+
+export const getJobIdData = async (id) => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+    await delay(1000);
+    if(jobDetails.job_id===id){
+        return jobDetails
+    }
+    else{
+        return {
+            status:500,
+            error:"error here!..."
+        };
+    }
 };
 
 export const getDeviceStats = async () => {

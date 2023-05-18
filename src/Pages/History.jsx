@@ -1,9 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Navbar from '../Components/Navbar'
 import { useNavigate } from 'react-router-dom'
+import { getHistory } from '../Mock_Backend/server';
+import { useSelector } from 'react-redux';
 
 function History() {
   const navigate=useNavigate();
+  const backend = useSelector((state) => state.data.backend);
+  const [data,setData]=useState();
+  useEffect(()=>{
+    const getData=async()=>{
+      if(!backend){
+        const data=await getHistory();
+        console.log(data);
+        setData(data);
+      }
+    }
+    getData();
+  },[])
+  console.log(data);
   return (
     <div className="min-h-screen flex flex-col items-center">
     <Navbar/>
@@ -24,48 +39,14 @@ function History() {
                         <th>Created On</th>
                         <th>Status</th>
                     </tr>
-                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black'>
-                        <td className='text-center'>1</td>
+                    {data?.map((item,index)=>
+                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black' key={index}>
+                        <td className='text-center'>{index+1}</td>
                         <td className='text-center'>collocation study</td>
-                        <td className='text-center'>{"#234"}</td>
-                        <td className='text-center'>11/05/2023</td>
-                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className='w-[40%] font-bold px-2 py-1 rounded-lg bg-[#19b40b] text-white'>Success</p></div></td>
-                    </tr>
-                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black'>
-                        <td className='text-center'>1</td>
-                        <td className='text-center'>collocation study</td>
-                        <td className='text-center'>{"#234"}</td>
-                        <td className='text-center'>11/05/2023</td>
-                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className='w-[40%] font-bold px-2 py-1 rounded-lg bg-[#ff1515] text-white'>Failed</p></div></td>
-                    </tr>
-                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black'>
-                        <td className='text-center'>1</td>
-                        <td className='text-center'>collocation study</td>
-                        <td className='text-center'>{"#234"}</td>
-                        <td className='text-center'>11/05/2023</td>
-                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className='w-[40%] font-bold px-2 py-1 rounded-lg bg-[#19b40b] text-white'>Success</p></div></td>
-                    </tr>
-                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black'>
-                        <td className='text-center'>1</td>
-                        <td className='text-center'>collocation study</td>
-                        <td className='text-center'>{"#234"}</td>
-                        <td className='text-center'>11/05/2023</td>
-                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className='w-[40%] font-bold px-2 py-1 rounded-lg bg-[#ff1515] text-white'>Failed</p></div></td>
-                    </tr>
-                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black'>
-                        <td className='text-center'>1</td>
-                        <td className='text-center'>collocation study</td>
-                        <td className='text-center'>{"#234"}</td>
-                        <td className='text-center'>11/05/2023</td>
-                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className='w-[40%] font-bold px-2 py-1 rounded-lg bg-[#19b40b] text-white'>Success</p></div></td>
-                    </tr>
-                    <tr className='h-[10vh] bg-slate-200 border-b-2 border-black'>
-                        <td className='text-center'>1</td>
-                        <td className='text-center'>collocation study</td>
-                        <td className='text-center'>{"#234"}</td>
-                        <td className='text-center'>11/05/2023</td>
-                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className='w-[40%] font-bold px-2 py-1 rounded-lg bg-[#ff1515] text-white'>Failed</p></div></td>
-                    </tr>
+                        <td className='text-center'>{item.job_id}</td>
+                        <td className='text-center'>{item.created_at}</td>
+                        <td className='text-center'><div className='w-full flex justify-center items-center'><p className={`w-[40%] font-bold px-2 py-1 rounded-lg ${item.status.toString()==="success"?'bg-[#19b40b]':'bg-[#e43131]'} text-white uppercase`}>{item.status}</p></div></td>
+                    </tr>)}
             </table>
         </div>
       </div>
