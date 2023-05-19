@@ -382,7 +382,7 @@ const DeviceSelection = () => {
       </div>
       <div className="w-screen ml-[0%] flex justify-center items-center mr-[5%]">
         <div className="basis-[10%] h-20"></div>
-        <div className="flex basis-4/5 flex-auto p-4 h-full gap-4 overflow-auto">
+        <div className="flex basis-4/5 flex-auto p-4 h-[40vh] gap-4 overflow-auto">
           {Data?.map((item, index) => {
             if (item.items.length > 0) {
               return (
@@ -402,57 +402,6 @@ const DeviceSelection = () => {
                       mobility={user[0]}
                     />
                   ))}
-                  {/* {!clickAll &&
-                  !clickAllm &&
-                  !clickAlls &&
-                  selectedOptions.length > 0
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={
-                            selectedOptions.includes(user.toUpperCase())
-                              ? "#323B4B"
-                              : "#878787"
-                          }
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : mstate || clickAllm
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={user[0] === "m" ? "#323B4B" : "#878787"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : clickAlls || sState
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={user[0] === "s" ? "#323B4B" : "#878787"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : state || clickAll
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={"#323B4B"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={"#878787"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))} */}
                 </div>
               );
             }

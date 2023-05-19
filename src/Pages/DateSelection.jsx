@@ -220,6 +220,7 @@ function DateSelection() {
                 <img src={calendar} alt="" className="mr-[5%]" />
                 <DatePicker
                   selected={endDate}
+                  minDate={startDate}
                   onChange={(date) => {setEndDate(date);dispatch(setToDate(date))}}
                   className="w-full flex-auto p-2 focus:outline-none "
                   placeholderText="DD/MM/YYYY"

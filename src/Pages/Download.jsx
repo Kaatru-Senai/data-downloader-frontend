@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 // import ProgressBar from "../Components/Progress_bar/ProgressBar";
@@ -73,6 +73,9 @@ function Download() {
       }
     }
   };
+  useEffect(()=>{
+    startAnimation(0);
+  })
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Navbar />
@@ -141,7 +144,7 @@ function Download() {
         </button>
         <button
           className="px-4 py-2 bg-[#323B4B] text-white rounded-lg"
-          onClick={() => startAnimation(0)}
+          onClick={() => console.log("start")}
         >
           Download
         </button>
