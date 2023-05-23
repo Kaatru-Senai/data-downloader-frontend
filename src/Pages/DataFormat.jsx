@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDataFormat } from "../redux/Features/DataSlice";
 
 
 function DataFormat() {
   const dispatch=useDispatch();
   const navigate = useNavigate();
-  const [jsonDataType,setJsonDataType]=useState(true);
+  const [jsonDataType,setJsonDataType]=useState(false);
   const [csvDataType,setCsvDataType]=useState(false);
+  const dataFormat=useSelector((state)=>state.data.newRequest.dataFormat);
+  useEffect(()=>{
+    switch(dataFormat.toString()){
+      case 'JSON':
+        setJsonDataType(true);
+        break;
+      case 'CSV':
+        setCsvDataType(true);
+        break;
+    }
+  },[])
   return (
     <div className="min-h-screen flex flex-col items-center">
     <Navbar/>

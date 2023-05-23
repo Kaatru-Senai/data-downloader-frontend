@@ -14,6 +14,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer, toast} from 'react-toastify';
 import DatabaseIcon from "../assets/database.svg";
 import Dropdown from 'react-dropdown';
+import axios from "axios";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 
 var Data = [
@@ -30,17 +33,19 @@ var Data = [
 ];
 
 function DateSelection() {
+  const [isLoading,setIsLoading]=useState(false);
   const [options,setoptions] = useState([]); 
-  const [Option,SetOption] = useState(options[0]?.dbname);
-  console.log(Option)
   const fromDate=useSelector((state)=>state.data.newRequest.from);
+  const dbName=useSelector((state)=>state.data.newRequest.dbName);
   const toDate=useSelector((state)=>state.data.newRequest.to);
   const showNotify = () => toast('Select the Database and From and To Dates...');
   const backend = useSelector((state) => state.data.backend);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
+  const [Option,SetOption] = useState({value:dbName});
+  console.log(fromDate.length);
+  const [startDate, setStartDate] = useState(fromDate.length>0?new Date(fromDate):"");
+  const [endDate, setEndDate] = useState(toDate.length>0?new Date(toDate):"");
   const [markers, setMarkers] = useState();
   const [devices, setDevices] = useState();
   const [devicesArr, setDevicesArr] = useState();
@@ -136,7 +141,19 @@ function DateSelection() {
     }
     else{
       console.log("main implementation");
+      const st=Date.parse(startDate)
+      const et=Date.parse(endDate)
+      console.log(Option)
+      const deviceStats = await axios.get(`http://127.0.0.1:8000/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`)
+      console.log(deviceStats);
+      let obj=[];
+      deviceStats.data.data.map((item)=>{
+        obj.push({"device":item.collection,"count":item.count})
+      })
+      setDevices(obj);
+      setIsLoading(false);
     }
+
   }
   const SetDB=(e)=>{
     dispatch(setDBName(e.value))
@@ -161,6 +178,24 @@ function DateSelection() {
         });
         console.log(markersArr);
         setMarkers(markersArr);
+      }
+      else{
+        const data = await getMarkers();
+        const dbList = await axios.get('http://127.0.0.1:8000/meta/dbs');
+        console.log(dbList.data.data);
+        dbList.data.data.map((item)=>{
+          setoptions(options=>[...options,item])
+      })
+      const markersArr = [];
+      data.map((item) => {
+        // setMarkers((markers) => [
+        //   ...markers,
+        //   [item.value.lat, item.value.long],
+        // ]);
+        markersArr.push([item.value.lat, item.value.long]);
+      });
+      console.log(markersArr);
+      setMarkers(markersArr);
       }
     };
     getData();
@@ -194,7 +229,7 @@ function DateSelection() {
           <div className="w-[20vw] flex flex-row justify-center items-center border-2 pl-2 rounded-lg bg-[#eeeeee]">
             <img src={DatabaseIcon} alt="" width={"20vmin"} />
             <div className="w-[2px] h-8 bg-stone-500 ml-4"></div>
-            <Dropdown options={options} onChange={(e)=>SetDB(e)} value={Option} placeholder="Select an option" className="flex-auto"/>
+            <Dropdown options={options} onChange={(e)=>SetDB(e)} value={Option.value} placeholder="Select an option" className="flex-auto"/>
           </div>
         </div>
           <div className="">
@@ -206,7 +241,8 @@ function DateSelection() {
                 <img src={calendar} alt="" className="mr-[5%]" />
                 <DatePicker
                   selected={startDate}
-                  onChange={(date) => {setStartDate(date);dispatch(setFromDate(date))}}
+                  selectsStart
+                  onChange={(date) => {setStartDate(date);dispatch(setFromDate(date.toString()))}}
                   className="w-full flex-auto p-2 focus:outline-none "
                   placeholderText="DD/MM/YYYY"
                 />
@@ -221,7 +257,7 @@ function DateSelection() {
                 <DatePicker
                   selected={endDate}
                   minDate={startDate}
-                  onChange={(date) => {setEndDate(date);dispatch(setToDate(date))}}
+                  onChange={(date) => {setEndDate(date);dispatch(setToDate(date.toString()))}}
                   className="w-full flex-auto p-2 focus:outline-none "
                   placeholderText="DD/MM/YYYY"
                 />
@@ -230,6 +266,7 @@ function DateSelection() {
             <div className="mt-4 w-full flex justify-end">
               <button className="px-4 py-2 bg-[#323B4B] text-white rounded-lg" onClick={()=>{
                 if(startDate!==undefined && endDate!==undefined){
+                  setIsLoading(true)
                   getData();
                 }
                 else{
@@ -278,7 +315,10 @@ function DateSelection() {
               />
             </div>
           </div>
-          <div className="flex-auto w-[100%] grid lg:grid-cols-5 2xl:grid-cols-6 h-full px-[5%] gap-y-2 overflow-auto">
+          {isLoading && <div className="w-full h-full flex justify-center items-center"><Box sx={{ display: 'flex' }} >
+      <CircularProgress />
+    </Box></div>}
+          {!isLoading && <div className="flex-auto w-[100%] grid lg:grid-cols-5 2xl:grid-cols-6 h-full px-[5%] gap-y-2 overflow-auto">
             {allDevices &&
               devices?.map((item) => {
                 return (
@@ -314,7 +354,7 @@ function DateSelection() {
                   }
                 })
               ))}
-          </div>
+          </div>}
         </div>
       </div>
       <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">

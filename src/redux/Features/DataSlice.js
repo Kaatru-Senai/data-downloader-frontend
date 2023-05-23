@@ -1,24 +1,36 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const user = localStorage.getItem("user");
-
+const user = sessionStorage.getItem("user");
+let LocalState = sessionStorage.getItem("persistantState")
+LocalState=JSON.parse(LocalState)
+// console.log(LocalState.data.newRequest.dataSource);
 export const DataSlice = createSlice({
   name: "data",
   initialState: {
     isUser: user,
     newRequest: {
-      dataSource: "",
-      deviceSelected: null,
-      dataFormat: "JSON",
-      dbName: "",
-      from: "",
-      to: "",
+      dataSource: (LocalState?.data?.newRequest.dataSource?LocalState.data.newRequest.dataSource:""),
+      deviceSelected: (LocalState?.data?.newRequest.deviceSelected?LocalState.data.newRequest.deviceSelected:""),
+      dataFormat: (LocalState?.data.newRequest.dataFormat?LocalState.data.newRequest.dataFormat:"JSON"),
+      dbName: (LocalState?.data.newRequest.dbName?LocalState.data.newRequest.dbName:""),
+      from: (LocalState?.data.newRequest.from?LocalState.data.newRequest.from:""),
+      to: (LocalState?.data.newRequest.to?LocalState.data.newRequest.to:""),
     },
-    backend: false,
+    backend: true
   },
   reducers: {
     setUser: (state, action) => {
       state.isUser = action.payload;
+      if(action.payload==false){
+        state.newRequest={
+          dataSource:"",
+          deviceSelected:"",
+          dataFormat:"JSON",
+          dbName:"",
+          from:"",
+          to:""
+        }
+      }
     },
     setDataSource: (state, action) => {
       state.newRequest.dataSource = action.payload;
@@ -46,6 +58,9 @@ export const DataSlice = createSlice({
       state.newRequest.deviceSelected = action.payload.deviceSelected;
       state.newRequest.dataSource = action.payload.dataSource;
     },
+    // logout:(state,action)=>{
+      
+    // }
   },
 });
 

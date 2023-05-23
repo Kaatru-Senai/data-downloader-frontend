@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DeviceData from "../assets/Squ.png";
 import Satelitte from "../assets/st.png";
 import GroundStation from "../assets/gst.png";
@@ -16,9 +16,25 @@ function DataSource() {
   const showNotify = () => toast('Select any one Data source to go further...');
   const dispatch=useDispatch();
   const navigate = useNavigate();
+  
   const [deviceActive, setDeviceActive] = useState(false);
   const [satelliteActive, setSatelliteActive] = useState(false);
   const [groundStationActive, setGroundStationActive] = useState(false);
+  useEffect(()=>{
+    console.log(dataSource);
+    switch(dataSource.toString()){
+      case 'SD':
+        setSatelliteActive(true);  
+        break;
+      case 'DD':
+        setDeviceActive(true);
+        break;
+      case 'GSD':
+        setGroundStationActive(true);
+        break;
+    }
+  },[])
+
   return (
     <div className="min-h-screen flex flex-col items-center">
     <Navbar />

@@ -13,7 +13,8 @@ function Navbar() {
   const Logout=()=>{
     navigate('/');
     dispatch(setUser(false));
-    localStorage.removeItem('user');
+    sessionStorage.removeItem("persistantState");
+    sessionStorage.removeItem('user');
   }
   return (
     <div className="w-full h-16 flex bg-[#323B4B] justify-between items-center fixed top-0 z-20">

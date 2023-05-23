@@ -1,11 +1,11 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Search from "../assets/Search.svg";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setDeviceSelected } from "../redux/Features/DataSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
@@ -48,6 +48,8 @@ const DeviceSelection = () => {
   const showNotify = () => toast("Enter Any one Device to Proceed Further...");
   const dispatch = useDispatch();
   const inputRef = useRef();
+  const selectedDevices=useSelector((state)=>state.data.newRequest.deviceSelected);
+  console.log(selectedDevices)
   // const [Data,setData]=useState([])
   const navigate = useNavigate();
   // const Location = useLocation();
@@ -258,6 +260,13 @@ const DeviceSelection = () => {
     setSelectedOptions(x);
     setColor(false);
   };
+
+  useEffect(()=>{
+    if(selectedDevices.toString().length>0){
+      validateConvert(selectedDevices);
+    }
+    inputRef.current.value=selectedDevices;
+  },[])
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Navbar />
@@ -311,6 +320,7 @@ const DeviceSelection = () => {
                   Data[3].items = [];
                 }
               }}
+              // value={selectedDevices}
             />
           </div>
           <div className="flex flex-row justify-center items-center gap-4 basis-4/6">
@@ -393,11 +403,7 @@ const DeviceSelection = () => {
                   {item.items?.map((user) => (
                     <DeviceImage
                       key={user}
-                      bcolor={
-                        selectedOptions.includes(user.toUpperCase())
-                          ? "#323B4B"
-                          : "#878787"
-                      }
+                      bcolor={"#323B4B"}
                       deivceId={user}
                       mobility={user[0]}
                     />

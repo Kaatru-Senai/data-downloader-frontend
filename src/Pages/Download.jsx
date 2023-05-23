@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 // import ProgressBar from "../Components/Progress_bar/ProgressBar";
@@ -73,9 +73,9 @@ function Download() {
       }
     }
   };
-  useEffect(()=>{
-    startAnimation(0);
-  })
+  // useEffect(()=>{
+  //   startAnimation(0);
+  // })
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Navbar />
