@@ -13,6 +13,7 @@ function MapView() {
   console.log(state.markers)
   const navigate = useNavigate();
   const backend = useSelector((state) => state.data.backend);
+  const countData = useSelector((state) => state.data.countData);
   const [data, setData] = useState();
   console.log(data);
   useEffect(() => {
@@ -22,6 +23,9 @@ function MapView() {
         const data = await getMarkers();
         console.log(data);
         setData(data);
+      }
+      else{
+        countData
       }
     }
     getData();

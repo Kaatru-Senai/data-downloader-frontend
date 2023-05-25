@@ -7,10 +7,11 @@ import JobId from "../assets/job_id.svg";
 import Navbar from "../Components/Navbar";
 import { useNavigate } from "react-router-dom";
 import { getJobIdData } from "../Mock_Backend/server";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setJobData } from "../redux/Features/DataSlice";
-import 'react-toastify/dist/ReactToastify.css';
-import {ToastContainer, toast} from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 const customStyles = {
   overlay: {
@@ -36,11 +37,13 @@ const customStyles = {
 };
 
 function RequestPage() {
-  const jobRef=useRef();
+  const backend = useSelector((state) => state.data.backend);
+  const jobRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [modalIsOpen, setIsOpen] = React.useState(false);
-  const showNotify = () => toast('The job Id you entered is wrong Please Check again...');
+  const showNotify = () =>
+    toast("The job Id you entered is wrong Please Check again...");
   function openModal() {
     setIsOpen(true);
   }
@@ -53,21 +56,32 @@ function RequestPage() {
     setIsOpen(false);
   }
 
-  const getDataForJobID=async()=>{
-    const getAllData= await getJobIdData(jobRef.current.value);
-    if(getAllData.status===500){
-      showNotify();
+  const getDataForJobID = async () => {
+    if (backend) {
+      const getAllData = await axios.get(`http://127.0.0.1:8000/job/status/${jobRef.current.value}`);
+      if (getAllData.status === 500) {
+        showNotify();
+      } else {
+        console.log(getAllData);
+        closeModal();
+        dispatch(setJobData(getAllData));
+        navigate("/download");
+      }
+    } else {
+      const getAllData = await getJobIdData(jobRef.current.value);
+      if (getAllData.status === 500) {
+        showNotify();
+      } else {
+        console.log(getAllData);
+        closeModal();
+        dispatch(setJobData(getAllData));
+        navigate("/download");
+      }
     }
-    else{
-    console.log(getAllData)
-    closeModal();
-    dispatch(setJobData(getAllData));
-    navigate('/download');
-    }
-  }
+  };
   return (
     <div className="min-h-screen flex flex-col items-center">
-    <Navbar />
+      <Navbar />
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[10%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
@@ -78,7 +92,10 @@ function RequestPage() {
       </div>
       <div className="w-[65vw] h-[45vh] flex justify-center items-center ml-[20%] mr-[20%] mt-[2%]">
         <div className="bg-[#F1F6FF] w-[80%] h-full flex flex-row justify-center items-center flex-auto rounded-lg pl-[20%] pr-[20%] pb-8 pt-8 gap-10">
-          <div className="bg-white h-full basis-1/2 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg" onClick={()=>navigate('/select-datasource')}>
+          <div
+            className="bg-white h-full basis-1/2 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg"
+            onClick={() => navigate("/select-datasource")}
+          >
             <img src={Plus} alt="" width={"40vmin"} />
             <p className="text-center font-semibold">
               New <br></br> Request
@@ -111,16 +128,22 @@ function RequestPage() {
           />
         </div>
         <div className="flex flex-col w-full h-[80%]">
-        <div className="flex flex-row justify-start items-center gap-8 mt-[5%] ml-[5%]">
-          <label htmlFor="" className="font-semibold">
-            JOB ID :-
-          </label>
-          <div className="flex flex-row justify-center items-center border-2 pl-2 rounded-lg">
-            <img src={JobId} alt="" width={"35vmin"} />
-            <div className="h-full w-4 bg-black"></div>
-            <input type="text" name="" id="" className="p-2 focus:outline-0" ref={jobRef}/>
+          <div className="flex flex-row justify-start items-center gap-8 mt-[5%] ml-[5%]">
+            <label htmlFor="" className="font-semibold">
+              JOB ID :-
+            </label>
+            <div className="flex flex-row justify-center items-center border-2 pl-2 rounded-lg">
+              <img src={JobId} alt="" width={"35vmin"} />
+              <div className="h-full w-4 bg-black"></div>
+              <input
+                type="text"
+                name=""
+                id=""
+                className="p-2 focus:outline-0"
+                ref={jobRef}
+              />
+            </div>
           </div>
-        </div>
           <div className="w-full flex-auto flex flex-row justify-end p-4 items-end mb-[4%] pr-[4%]">
             <button
               type="submit"
@@ -134,10 +157,9 @@ function RequestPage() {
           </div>
         </div>
       </Modal>
-      <ToastContainer position="top-right" closeOnClick autoClose={false}/>
+      <ToastContainer position="top-right" closeOnClick autoClose={false} />
     </div>
   );
 }
 
 export default RequestPage;
-

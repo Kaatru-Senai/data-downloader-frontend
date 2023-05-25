@@ -12,6 +12,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.4.0",
+    "js-file-download": "^0.4.12",
     "leaflet": "^1.7.1",
     "millify": "^6.1.0",
     "react": "^17.0.1",

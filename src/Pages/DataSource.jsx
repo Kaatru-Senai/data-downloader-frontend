@@ -17,20 +17,20 @@ function DataSource() {
   const dispatch=useDispatch();
   const navigate = useNavigate();
   
-  const [deviceActive, setDeviceActive] = useState(false);
+  const [deviceActive, setDeviceActive] = useState(true);
   const [satelliteActive, setSatelliteActive] = useState(false);
   const [groundStationActive, setGroundStationActive] = useState(false);
   useEffect(()=>{
     console.log(dataSource);
     switch(dataSource.toString()){
       case 'SD':
-        setSatelliteActive(true);  
+        // setSatelliteActive(true);  
         break;
       case 'DD':
         setDeviceActive(true);
         break;
       case 'GSD':
-        setGroundStationActive(true);
+        // setGroundStationActive(true);
         break;
     }
   },[])
@@ -81,10 +81,10 @@ function DataSource() {
             } relative h-full basis-1/3 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg`}
             onClick={() => {
               toast.dismiss();
-              dispatch(setDataSource("SD"))
-              setDeviceActive(false);
-              setGroundStationActive(false);
-              setSatelliteActive(true);
+              // dispatch(setDataSource("SD"))
+              // setDeviceActive(false);
+              // setGroundStationActive(false);
+              // setSatelliteActive(true);
             }}
           >
             <div className="w-auto p-4 rounded-[50%] border-2 bg-[#F3F3F3]">
@@ -107,10 +107,10 @@ function DataSource() {
             } relative h-full basis-1/3 flex flex-col justify-center items-center gap-4 cursor-pointer rounded-lg`}
             onClick={() => {
               toast.dismiss();
-              dispatch(setDataSource("GSD"))
-              setDeviceActive(false);
-              setGroundStationActive(true);
-              setSatelliteActive(false);
+              // dispatch(setDataSource("GSD"))
+              // setDeviceActive(false);
+              // setGroundStationActive(true);
+              // setSatelliteActive(false);
             }}
           >
             <div className="w-auto p-4 rounded-[50%] border-2 bg-[#F3F3F3]">

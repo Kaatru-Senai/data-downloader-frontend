@@ -1,14 +1,19 @@
-import React from "react";
+/* eslint-disable no-unused-vars */
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 // import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
 import RiveAnimation from "../assets/liquid_download.riv";
 import { useSelector } from "react-redux";
-import { getFile } from "../Mock_Backend/server";
+// import { getFile } from "../Mock_Backend/server";
+import axios from "axios";
+import Axios from "axios";
+import FileDownload from "js-file-download";
 
 function Download() {
-  
+  const jobId=useSelector((state)=>state.data.jobId);
+  console.log(jobId)
   const data = useSelector((state) => state.data.newRequest);
   const { rive, RiveComponent } = useRive({
     src: RiveAnimation,
@@ -18,22 +23,11 @@ function Download() {
     }),
     stateMachines: "State machine 1",
     autoplay: true,
-    onLoop: false
+    onLoop: false,
   });
   const navigate = useNavigate();
-
-  const getFileRequest=async()=>{
-    const getRequest=await getFile();
-    if(getRequest){
-      return true;
-    }
-    else{
-      return false;
-    }
-  }
-  // const [count,setCount]=useState(0);
-  const startAnimation = async(count) => {
-    // rive.reset();
+  const [progress,setProgress]=useState(false);
+  const startAnimation = async (count, job_Id) => {
     if (count == 0) {
       let inputs = rive.stateMachineInputs("State machine 1");
       const Trigger = inputs.find((i) => i.name === "Downloading");
@@ -41,7 +35,8 @@ function Download() {
       const Progress = inputs.find((i) => i.name === "Progress");
       Progress.value = 0;
       setTimeout(() => {
-        startAnimation(count + 1);
+        // console.log(postJob.data.job_id);
+        startAnimation(count + 1, jobId);
       }, 100);
     } else {
       let inputs = rive.stateMachineInputs("State machine 1");
@@ -50,32 +45,34 @@ function Download() {
       Trigger.value = true;
       const Progress = inputs.find((i) => i.name === "Progress");
       console.log(count);
+      const timer = setInterval(async () => {
+        const getRequest = await axios.get(
+          `http://127.0.0.1:8000/job/status/${job_Id}`
+        );
+        Progress.value = getRequest.data.progress;
+        if (getRequest.data.progress === 100) {
+          setProgress(true);
+          clearInterval(timer);
+          setTimeout(()=>{
+            Axios({
+              url: `http://127.0.0.1:8000/job/download/${job_Id}`,
+              method: "GET",
+              responseType: "blob", // Important
+            }).then((response) => {
+              FileDownload(response.data, `${job_Id}.zip`);
+            });
+          },3000)  
+        }
+      }, 5000);
       Progress.value = count;
-      const timer=setTimeout(async() => {
-        if(count==50){
-         
-          const wait=await getFileRequest();
 
-          if(wait===true){
-            startAnimation(52);
-          }
-          else{
-            startAnimation(count);
-          } 
-        }
-        else{
-          startAnimation(count + 1);
-        }
-      }, 100);
-      if(count===100){
-        console.log("should terminate here")
+      if (count === 100) {
+        console.log("should terminate here");
         clearTimeout(timer);
       }
     }
   };
-  // useEffect(()=>{
-  //   startAnimation(0);
-  // })
+
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Navbar />
@@ -89,7 +86,7 @@ function Download() {
         <div className="basis-[10%] text-center h-full"></div>
         <div className="flex flex-row justify-between h-[80%] items-start flex-auto mr-[2%] gap-4">
           <div className="basis-[30%]  bg-[#F2F5FB] flex-auto h-full">
-            <RiveComponent onLoad={()=>startAnimation(0)}/>
+            <RiveComponent onLoad={() => startAnimation(0)} />
           </div>
           <div className="bg-[#F2F5FB] flex-auto h-full flex flex-col p-2 font-semibold text-[3vmin]">
             <div className="p-2 text-center">
@@ -103,19 +100,15 @@ function Download() {
                 </div>
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">JOB ID :</p>
-                  <p className="font-normal">#234235</p>
+                  <p className="font-normal">{jobId}</p>
                 </div>
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">From Date :</p>
-                  <p className="font-normal">
-                    {data.from.toLocaleString().split(",")[0]}
-                  </p>
+                  <p className="font-normal">{data.from?.slice(4, 15)}</p>
                 </div>
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">To Date :</p>
-                  <p className="font-normal">
-                    {data.from.toLocaleString().split(",")[0]}
-                  </p>
+                  <p className="font-normal">{data.to?.slice(4, 15)}</p>
                 </div>
 
                 <div className="flex flex-row justify-between w-full p-1 border-b-2">
@@ -124,11 +117,11 @@ function Download() {
                 </div>
                 <div className="flex flex-row  justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">Sensors: </p>
-                  <p className="font-normal">{data.deviceSelected}</p>
+                  <p className="font-normal">{data.deviceSelected.toString().slice(0,10)+"....."}</p>
                 </div>
                 <div className="flex flex-row justify-between w-full p-1">
                   <p className="font-semibold">Status: </p>
-                  <p className="font-normal">Pending</p>
+                  <p className="font-normal">{progress?"Completed":"Pending"}</p>
                 </div>
               </div>
             </div>
@@ -144,7 +137,7 @@ function Download() {
         </button>
         <button
           className="px-4 py-2 bg-[#323B4B] text-white rounded-lg"
-          onClick={() => console.log("start")}
+          onClick={() => startAnimation(0)}
         >
           Download
         </button>
@@ -154,3 +147,106 @@ function Download() {
 }
 
 export default Download;
+
+// const getFileRequest = async (job_Id) => {
+//   console.log("one time execution");
+//   let getRequest;
+//   let timer;
+//   let progress;
+//   if (backend) {
+//     if (progress !== 100) {
+//       timer = setInterval(async () => {
+// getRequest = await axios.get(
+//   `http://127.0.0.1:8000/job/status/${job_Id}`
+// );
+//         console.log(getRequest.data.progress);
+//         progress = getRequest.data.progress;
+//         if (getRequest.data.progress > 50) {
+//           setJobProgress(getRequest.data.progress);
+//         }
+//         if (getRequest.data.progress === 100) {
+//           console.log("should be clear here");
+//           clearInterval(timer);
+//           return true;
+//         }
+//       }, 1000);
+//     } else if (progress === 100) {
+//       console.log("donwload api");
+//       clearInterval(timer);
+//       Axios({
+//         url: `http://127.0.0.1:8000/job/download/${job_Id}`,
+//         method: "GET",
+//         responseType: "blob", // Important
+//       }).then((response) => {
+//         FileDownload(response.data, `${job_Id}.zip`);
+//       });
+//     }
+//   } else {
+//     getRequest = await getFile();
+//   }
+//   console.log(progress)
+//   if (progress === 100) {
+//     console.log("returining true here");
+//     return true;
+//   }
+//   else{
+//     return false
+//   }
+// };
+// let job_Id;
+// // const [count,setCount]=useState(0);
+// const startAnimation = async (count) => {
+//   if (count == 0) {
+//     const st = Date.parse(data.from);
+//     const et = Date.parse(data.to);
+//     const postJob = await axios.post(`http://127.0.0.1:8000/job/`, {
+//       st: st,
+//       et: et,
+//       cols: data.devices,
+//       db: data.dbName,
+//       dt: "a",
+//     });
+//     setJobId(postJob.data.job_id);
+//     job_Id = postJob.data.job_id;
+//     console.log(jobId);
+//     let inputs = rive.stateMachineInputs("State machine 1");
+//     const Trigger = inputs.find((i) => i.name === "Downloading");
+//     Trigger.value = false;
+//     const Progress = inputs.find((i) => i.name === "Progress");
+//     Progress.value = 0;
+//     setTimeout(() => {
+//       startAnimation(count + 1);
+//     }, 100);
+//   } else {
+//     let inputs = rive.stateMachineInputs("State machine 1");
+//     console.log(inputs);
+//     const Trigger = inputs.find((i) => i.name === "Downloading");
+//     Trigger.value = true;
+//     const Progress = inputs.find((i) => i.name === "Progress");
+//     console.log(count);
+//     Progress.value = count;
+//     // if(count===50){
+
+//     // }
+//     const timer = setTimeout(async () => {
+//       if (count === 50) {
+//         console.log(job_Id);
+//         const wait = await getFileRequest(job_Id);
+//         console.log(wait);
+//         if (wait === true) {
+//           startAnimation(52);
+//         } else {
+//           console.log(jobProgress);
+//           startAnimation(50);
+//         }
+//       } else {
+//         console.log(jobProgress);
+//         startAnimation(count + 1);
+//       }
+//     }, 100);
+//     if (count === 100) {
+//       console.log("should terminate here");
+//       clearTimeout(timer);
+//     }
+//   }
+// };

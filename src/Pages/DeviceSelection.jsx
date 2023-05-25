@@ -6,7 +6,7 @@ import Search from "../assets/Search.svg";
 import Navbar from "../Components/Navbar";
 import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import { useDispatch, useSelector } from "react-redux";
-import { setDeviceSelected } from "../redux/Features/DataSlice";
+import { setDeviceSelected, setDevicesList } from "../redux/Features/DataSlice";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import {
@@ -46,10 +46,14 @@ var Data = [
 
 const DeviceSelection = () => {
   const showNotify = () => toast("Enter Any one Device to Proceed Further...");
+  const backend = useSelector((state) => state.data.backend);
+  const countData = useSelector((state) => state.data.countData);
   const dispatch = useDispatch();
   const inputRef = useRef();
-  const selectedDevices=useSelector((state)=>state.data.newRequest.deviceSelected);
-  console.log(selectedDevices)
+  const selectedDevices = useSelector(
+    (state) => state.data.newRequest.deviceSelected
+  );
+  console.log(selectedDevices);
   // const [Data,setData]=useState([])
   const navigate = useNavigate();
   // const Location = useLocation();
@@ -63,69 +67,8 @@ const DeviceSelection = () => {
   const [clickAlls, setCAS] = React.useState(false);
   const [color, setColor] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = React.useState({});
-  const [devicesArray, setDevicesArray] = useState();
-  // let data, bData;
-  // try {
-  //   data = JSON.parse(Location.state["data"]);
-  //   // console.log(data);
-  // } catch (error) {
-  //   console.log("page2: " + error);
-  // }
-  // bData = data;
-
-  // const ToString = (arr) => {
-  //   var x = arr[0];
-  //   for (var i = 1; i < arr.length; i++) {
-  //     x += "," + arr[i];
-  //   }
-  //   return x;
-  // };
-
-  // const Front = () => {
-  //   if (clickAll) {
-  //     try {
-  //       data["DeviceIds"] = Data;
-  //       data["DeviceIds"] = ToString(data["DeviceIds"]);
-  //       navigate("/select-sensor", {
-  //         state: { data: JSON.stringify(data) },
-  //       });
-  //     } catch (error) {
-  //       console.log("page2" + error);
-  //     }
-  //   } else if (clickAllm) {
-  //     try {
-  //       data["DeviceIds"] = Data.filter((temp) => {
-  //         return temp[0] === "m";
-  //       });
-  //       data["DeviceIds"] = ToString(data["DeviceIds"]);
-
-  //       navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   } else if (clickAlls) {
-  //     try {
-  //       data["DeviceIds"] = Data.filter((temp) => {
-  //         return temp[0] === "s";
-  //       });
-  //       data["DeviceIds"] = ToString(data["DeviceIds"]);
-  //       navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   } else if (selectedOptions.length > 0) {
-  //     let x = selectedOptions;
-  //     data["DeviceIds"] = x;
-  //     navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-  //   } else {
-  //     alert("please Select one option to go another page");
-  //   }
-  // };
-
-  // const Back = () => {
-  //   navigate("/select-data-source", { state: { data: JSON.stringify(bData) } });
-  // };
-
+  const [devices, setDevices] = useState();
+  console.log(countData)
   const validateConvert = (data) => {
     console.log(data);
     data = data.toUpperCase();
@@ -191,7 +134,6 @@ const DeviceSelection = () => {
     res = res.slice(0, res.length - 1);
     var array = res.split(",");
     console.log(array);
-    setDevicesArray(array);
     array.forEach((item) => {
       if (/S/.test(item)) {
         if (!Data[0].items?.includes(item.toString()))
@@ -211,16 +153,26 @@ const DeviceSelection = () => {
     Data[1].items = [];
     Data[2].items = [];
     Data[3].items = [];
-    const getdata = await getAllDevices();
-    let str = "";
-    getdata.map((item) => {
-      str = str + item.device + ",";
-    });
+    let str=""
+    if (!backend) {
+      const getdata = await getAllDevices();
+      getdata.map((item) => {
+        str = str + item.device + ",";
+      });
+    }
+    else{
+      countData?.map((item) => {
+        if(/^[M]\d/.test(item.collection)||/^[S]\d/.test(item.collection)){
+          str = str + item.collection + ",";
+        }
+        console.log(str)
+      });
+    }
     str = str.substring(0, str.length - 1);
     console.log(str);
     let x = validateConvert(str);
     console.log(x);
-    inputRef.current.value=x
+    inputRef.current.value = x;
     setSelectedOptions(x);
     setColor(false);
   };
@@ -229,16 +181,26 @@ const DeviceSelection = () => {
     Data[1].items = [];
     Data[2].items = [];
     Data[3].items = [];
-    const getdata = await getAllMobileDevices();
-    let str = "";
-    getdata.map((item) => {
-      str = str + item.device + ",";
-    });
+    let str=""
+    if (!backend) {
+      const getdata = await getAllDevices();
+      getdata.map((item) => {
+        str = str + item.device + ",";
+      });
+    }
+    else{
+      countData?.map((item) => {
+        if(/^[M]\d/.test(item.collection)){
+          str = str + item.collection + ",";
+        }
+        console.log(str)
+      });
+    }
     str = str.substring(0, str.length - 1);
     console.log(str);
     let x = validateConvert(str);
     console.log(x);
-    inputRef.current.value=x
+    inputRef.current.value = x;
     setSelectedOptions(x);
     setColor(false);
   };
@@ -247,26 +209,38 @@ const DeviceSelection = () => {
     Data[1].items = [];
     Data[2].items = [];
     Data[3].items = [];
-    const getdata = await getAllStationaryDevices();
-    let str = "";
-    getdata.map((item) => {
-      str = str + item.device + ",";
-    });
+    let str=""
+    if (!backend) {
+      const getdata = await getAllDevices();
+      getdata.map((item) => {
+        str = str + item.device + ",";
+      });
+    }
+    else{
+      countData?.map((item) => {
+        if(/^[S]\d/.test(item.collection)){
+          str = str + item.collection + ",";
+        }
+        console.log(str)
+      });
+    }
     str = str.substring(0, str.length - 1);
     console.log(str);
     let x = validateConvert(str);
     console.log(x);
-    inputRef.current.value=x
+    inputRef.current.value = x;
     setSelectedOptions(x);
     setColor(false);
   };
 
-  useEffect(()=>{
-    if(selectedDevices.toString().length>0){
-      validateConvert(selectedDevices);
+  useEffect(() => {
+    if (selectedDevices.toString().length > 0) {
+      let devices = validateConvert(selectedDevices);
+      console.log(devices);
+      setDevices(devices);
     }
-    inputRef.current.value=selectedDevices;
-  },[])
+    inputRef.current.value = selectedDevices;
+  }, []);
   return (
     <div className="min-h-screen flex flex-col items-center">
       <Navbar />
@@ -304,6 +278,7 @@ const DeviceSelection = () => {
                 if (len > 0) {
                   let x = validateConvert(data.target.value);
                   console.log(x);
+                  setDevices(x);
                   if (len && x !== false) {
                     setSelectedOptions(x);
                     setCA(false);
@@ -427,6 +402,7 @@ const DeviceSelection = () => {
             if (inputRef.current.value.length > 0) {
               navigate("/select-datatype");
               dispatch(setDeviceSelected(inputRef.current.value));
+              dispatch(setDevicesList(devices));
             } else {
               showNotify();
             }

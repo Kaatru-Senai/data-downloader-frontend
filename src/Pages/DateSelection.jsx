@@ -7,7 +7,7 @@ import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router-dom";
 import Search from "../assets/Search.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { setDBName, setFromDate, setToDate } from "../redux/Features/DataSlice";
+import { setCountData, setDBName, setFromDate, setToDate } from "../redux/Features/DataSlice";
 import { getDatabaseList, getDeviceStats, getMarkers } from "../Mock_Backend/server";
 import millify from "millify";
 import 'react-toastify/dist/ReactToastify.css';
@@ -33,6 +33,7 @@ var Data = [
 ];
 
 function DateSelection() {
+  const [isCheck,setIsCheck]=useState(false);
   const [isLoading,setIsLoading]=useState(false);
   const [options,setoptions] = useState([]); 
   const fromDate=useSelector((state)=>state.data.newRequest.from);
@@ -145,7 +146,7 @@ function DateSelection() {
       const et=Date.parse(endDate)
       console.log(Option)
       const deviceStats = await axios.get(`http://127.0.0.1:8000/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`)
-      console.log(deviceStats);
+      dispatch(setCountData(deviceStats.data.data))
       let obj=[];
       deviceStats.data.data.map((item)=>{
         obj.push({"device":item.collection,"count":item.count})
@@ -170,10 +171,6 @@ function DateSelection() {
         })
         const markersArr = [];
         data.map((item) => {
-          // setMarkers((markers) => [
-          //   ...markers,
-          //   [item.value.lat, item.value.long],
-          // ]);
           markersArr.push([item.value.lat, item.value.long]);
         });
         console.log(markersArr);
@@ -216,8 +213,9 @@ function DateSelection() {
         <div className="basis-1/3 h-full flex flex-col justify-between">
           <div className="w-full flex justify-end">
             <button
-              className="w-auto px-2 py-2 bg-[#323B4B] rounded-lg text-white font-bold"
+              className={`w-auto px-2 py-2 rounded-lg text-white font-bold ${!isCheck?"bg-[#9d9d9d]":"bg-[#323B4B]"}`}
               onClick={() => navigate("/map", { state: { markers } })}
+              disabled={isCheck}
             >
               View Map
             </button>
@@ -229,7 +227,7 @@ function DateSelection() {
           <div className="w-[20vw] flex flex-row justify-center items-center border-2 pl-2 rounded-lg bg-[#eeeeee]">
             <img src={DatabaseIcon} alt="" width={"20vmin"} />
             <div className="w-[2px] h-8 bg-stone-500 ml-4"></div>
-            <Dropdown options={options} onChange={(e)=>SetDB(e)} value={Option.value} placeholder="Select an option" className="flex-auto"/>
+            <Dropdown options={options} onChange={(e)=>{SetDB(e);setIsCheck(false)}} value={Option.value} placeholder="Select an option" className="flex-auto"/>
           </div>
         </div>
           <div className="">
@@ -241,8 +239,8 @@ function DateSelection() {
                 <img src={calendar} alt="" className="mr-[5%]" />
                 <DatePicker
                   selected={startDate}
-                  selectsStart
-                  onChange={(date) => {setStartDate(date);dispatch(setFromDate(date.toString()))}}
+                  showTimeInput
+                  onChange={(date) => {setStartDate(date);dispatch(setFromDate(date.toString()));setIsCheck(false)}}
                   className="w-full flex-auto p-2 focus:outline-none "
                   placeholderText="DD/MM/YYYY"
                 />
@@ -257,7 +255,8 @@ function DateSelection() {
                 <DatePicker
                   selected={endDate}
                   minDate={startDate}
-                  onChange={(date) => {setEndDate(date);dispatch(setToDate(date.toString()))}}
+                  showTimeInput
+                  onChange={(date) => {setEndDate(date);dispatch(setToDate(date.toString()));setIsCheck(false)}}
                   className="w-full flex-auto p-2 focus:outline-none "
                   placeholderText="DD/MM/YYYY"
                 />
@@ -265,9 +264,11 @@ function DateSelection() {
             </div>
             <div className="mt-4 w-full flex justify-end">
               <button className="px-4 py-2 bg-[#323B4B] text-white rounded-lg" onClick={()=>{
-                if(startDate!==undefined && endDate!==undefined){
+                console.log(startDate)
+                if(startDate!==undefined && endDate!==undefined && startDate.toString().length>0 && endDate.toString().length>0){
                   setIsLoading(true)
                   getData();
+                  setIsCheck(true);
                 }
                 else{
                   showNotify();
@@ -368,6 +369,7 @@ function DateSelection() {
           className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg"
           onClick={() => {
             if(fromDate.toString().length > 0 && toDate.toString().length > 0 && Option!==undefined){
+              getData();
               navigate("/select-devices");
             }
             else{
