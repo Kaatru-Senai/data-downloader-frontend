@@ -65,11 +65,11 @@ function MapView() {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          {data?.map((item) => {
+          {state.markers?.map((item) => {
             return (
               <Marker
-                position={[item.value.lat, item.value.long]}
-                key={item.value.dPM1}
+                position={[item[0], item[1]]}
+                key={item}
               >
                 <Popup>
                   A pretty CSS3 popup. <br /> Easily customizable.

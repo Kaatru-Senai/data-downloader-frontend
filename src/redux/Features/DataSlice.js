@@ -26,7 +26,7 @@ export const DataSlice = createSlice({
       state.isUser = action.payload;
       if(action.payload==false){
         state.newRequest={
-          dataSource:"",
+          dataSource:"DD",
           deviceSelected:"",
           dataFormat:"JSON",
           dbName:"",

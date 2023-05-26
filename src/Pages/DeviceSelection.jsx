@@ -234,6 +234,10 @@ const DeviceSelection = () => {
   };
 
   useEffect(() => {
+    Data[0].items = [];
+    Data[1].items = [];
+    Data[2].items = [];
+    Data[3].items = [];
     if (selectedDevices.toString().length > 0) {
       let devices = validateConvert(selectedDevices);
       console.log(devices);
