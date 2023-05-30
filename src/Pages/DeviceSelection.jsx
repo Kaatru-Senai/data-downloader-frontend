@@ -1,6 +1,19 @@
-import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Search from "../assets/Search.svg";
+import Navbar from "../Components/Navbar";
+import ProgressBar from "../Components/Progress_bar/ProgressBar";
+import { useDispatch, useSelector } from "react-redux";
+import { setDeviceSelected, setDevicesList } from "../redux/Features/DataSlice";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
+import {
+  getAllDevices,
+  getAllMobileDevices,
+  getAllStationaryDevices,
+} from "../Mock_Backend/server";
 
 const DeviceImage = (props) => {
   return (
@@ -31,10 +44,19 @@ var Data = [
   },
 ];
 
-const DeviceSelection = ({nextProgress,previousProgress}) => {
+const DeviceSelection = () => {
+  const showNotify = () => toast("Enter Any one Device to Proceed Further...");
+  const backend = useSelector((state) => state.data.backend);
+  const countData = useSelector((state) => state.data.countData);
+  const dispatch = useDispatch();
+  const inputRef = useRef();
+  const selectedDevices = useSelector(
+    (state) => state.data.newRequest.deviceSelected
+  );
+  console.log(selectedDevices);
+  // const [Data,setData]=useState([])
   const navigate = useNavigate();
-
-  const Location = useLocation();
+  // const Location = useLocation();
   const [state, setState] = React.useState(false);
   const [clickAll, setCA] = React.useState(false);
 
@@ -45,70 +67,10 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
   const [clickAlls, setCAS] = React.useState(false);
   const [color, setColor] = React.useState(false);
   const [selectedOptions, setSelectedOptions] = React.useState({});
-
-  let data, bData;
-  try {
-    data = JSON.parse(Location.state["data"]);
-    // console.log(data);
-  } catch (error) {
-    console.log("page2: " + error);
-  }
-  bData = data;
-
-  const ToString = (arr) => {
-    var x = arr[0];
-    for (var i = 1; i < arr.length; i++) {
-      x += "," + arr[i];
-    }
-    return x;
-  };
-
-  const Front = () => {
-    if (clickAll) {
-      try {
-        data["DeviceIds"] = Data;
-        data["DeviceIds"] = ToString(data["DeviceIds"]);
-        navigate("/select-sensor", {
-          state: { data: JSON.stringify(data) },
-        });
-      } catch (error) {
-        console.log("page2" + error);
-      }
-    } else if (clickAllm) {
-      try {
-        data["DeviceIds"] = Data.filter((temp) => {
-          return temp[0] === "m";
-        });
-        data["DeviceIds"] = ToString(data["DeviceIds"]);
-
-        navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (clickAlls) {
-      try {
-        data["DeviceIds"] = Data.filter((temp) => {
-          return temp[0] === "s";
-        });
-        data["DeviceIds"] = ToString(data["DeviceIds"]);
-        navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (selectedOptions.length > 0) {
-      let x = selectedOptions;
-      data["DeviceIds"] = x;
-      navigate("/select-sensor", { state: { data: JSON.stringify(data) } });
-    } else {
-      alert("please Select one option to go another page");
-    }
-  };
-
-  const Back = () => {
-    navigate("/select-data-source", { state: { data: JSON.stringify(bData) } });
-  };
-
+  const [devices, setDevices] = useState();
+  console.log(countData)
   const validateConvert = (data) => {
+    console.log(data);
     data = data.toUpperCase();
     data = data.replace(" ", "");
     let arr = data.split(",");
@@ -144,8 +106,8 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
             if (from > to) {
               [from, to] = [to, from];
             }
-            for (var i = from; i <= to; i++) {
-              res += x[0] + `${i},`;
+            for (var j = from; j <= to; j++) {
+              res += x[0] + `${j},`;
             }
           } else {
             return false;
@@ -186,8 +148,107 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
     });
     return res;
   };
+  const getAllDevicesData = async () => {
+    Data[0].items = [];
+    Data[1].items = [];
+    Data[2].items = [];
+    Data[3].items = [];
+    let str=""
+    if (!backend) {
+      const getdata = await getAllDevices();
+      getdata.map((item) => {
+        str = str + item.device + ",";
+      });
+    }
+    else{
+      countData?.map((item) => {
+        if(/^[M]\d/.test(item.collection)||/^[S]\d/.test(item.collection)){
+          str = str + item.collection + ",";
+        }
+        console.log(str)
+      });
+    }
+    str = str.substring(0, str.length - 1);
+    console.log(str);
+    let x = validateConvert(str);
+    console.log(x);
+    inputRef.current.value = x;
+    setSelectedOptions(x);
+    setColor(false);
+  };
+  const getAllMobileDevicesData = async () => {
+    Data[0].items = [];
+    Data[1].items = [];
+    Data[2].items = [];
+    Data[3].items = [];
+    let str=""
+    if (!backend) {
+      const getdata = await getAllDevices();
+      getdata.map((item) => {
+        str = str + item.device + ",";
+      });
+    }
+    else{
+      countData?.map((item) => {
+        if(/^[M]\d/.test(item.collection)){
+          str = str + item.collection + ",";
+        }
+        console.log(str)
+      });
+    }
+    str = str.substring(0, str.length - 1);
+    console.log(str);
+    let x = validateConvert(str);
+    console.log(x);
+    inputRef.current.value = x;
+    setSelectedOptions(x);
+    setColor(false);
+  };
+  const getAllStationaryDevicesData = async () => {
+    Data[0].items = [];
+    Data[1].items = [];
+    Data[2].items = [];
+    Data[3].items = [];
+    let str=""
+    if (!backend) {
+      const getdata = await getAllDevices();
+      getdata.map((item) => {
+        str = str + item.device + ",";
+      });
+    }
+    else{
+      countData?.map((item) => {
+        if(/^[S]\d/.test(item.collection)){
+          str = str + item.collection + ",";
+        }
+        console.log(str)
+      });
+    }
+    str = str.substring(0, str.length - 1);
+    console.log(str);
+    let x = validateConvert(str);
+    console.log(x);
+    inputRef.current.value = x;
+    setSelectedOptions(x);
+    setColor(false);
+  };
+
+  useEffect(() => {
+    Data[0].items = [];
+    Data[1].items = [];
+    Data[2].items = [];
+    Data[3].items = [];
+    if (selectedDevices.toString().length > 0) {
+      let devices = validateConvert(selectedDevices);
+      console.log(devices);
+      setDevices(devices);
+    }
+    inputRef.current.value = selectedDevices;
+  }, []);
   return (
-    <>
+    <div className="min-h-screen flex flex-col items-center">
+      <Navbar />
+      <ProgressBar />
       <div className="w-screen flex flex-row items-center justify-center ml-[0%] mt-[3%]">
         <div className="basis-[10%] text-center">
           <p className="font-semibold">Step 1</p>
@@ -209,13 +270,19 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
                 fontSize: "20px",
                 borderRadius: "5px",
               }}
+              ref={inputRef}
               className="border-none focus:outline-none px-4 bg-[#eeeeee]" /*options={optionList}*/
               placeholder="e.g. s1-s10,m3-m5"
               onChange={(data) => {
                 let len = data.target.value.length;
-
+                Data[0].items = [];
+                Data[1].items = [];
+                Data[2].items = [];
+                Data[3].items = [];
                 if (len > 0) {
                   let x = validateConvert(data.target.value);
+                  console.log(x);
+                  setDevices(x);
                   if (len && x !== false) {
                     setSelectedOptions(x);
                     setCA(false);
@@ -226,11 +293,13 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
                     setColor(true);
                   }
                 } else if (len === 0) {
-                  Data[0].items.length = 0;
-                  Data[1].items.length = 0;
-                  Data[2].items.length = 0;
+                  Data[0].items = [];
+                  Data[1].items = [];
+                  Data[2].items = [];
+                  Data[3].items = [];
                 }
               }}
+              // value={selectedDevices}
             />
           </div>
           <div className="flex flex-row justify-center items-center gap-4 basis-4/6">
@@ -250,9 +319,10 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
                   setCAM(false);
                   setCAS(false);
                 }
+                getAllDevicesData();
                 setCA(!clickAll);
               }}
-              className="bg-[#eeeeee] p-3 rounded-lg"
+              className="bg-[#eeeeee] p-3 rounded-lg cursor-pointer"
             >
               Select all devices{" "}
             </div>
@@ -263,6 +333,7 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
                   setCA(false);
                   setCAS(false);
                 }
+                getAllMobileDevicesData();
                 setCAM(!clickAllm);
               }}
               onMouseOver={() => {
@@ -271,7 +342,7 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
               onMouseOut={() => {
                 setMstate(false);
               }}
-              className="bg-[#eeeeee] p-3 rounded-lg"
+              className="bg-[#eeeeee] p-3 rounded-lg cursor-pointer"
             >
               Select all Mobile{" "}
             </div>
@@ -282,6 +353,7 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
                   setCA(false);
                   setCAM(false);
                 }
+                getAllStationaryDevicesData();
                 setCAS(!clickAlls);
               }}
               onMouseOver={() => {
@@ -290,7 +362,7 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
               onMouseOut={() => {
                 setSstate(false);
               }}
-              className="bg-[#eeeeee] p-3 rounded-lg"
+              className="bg-[#eeeeee] p-3 rounded-lg cursor-pointer"
             >
               Select all Stationary{" "}
             </div>
@@ -299,73 +371,52 @@ const DeviceSelection = ({nextProgress,previousProgress}) => {
       </div>
       <div className="w-screen ml-[0%] flex justify-center items-center mr-[5%]">
         <div className="basis-[10%] h-20"></div>
-        <div className="flex basis-4/5 flex-auto p-4 h-[400px] gap-4 overflow-auto">
-          {Data?.map((item) => {
+        <div className="flex basis-4/5 flex-auto p-4 h-[40vh] gap-4 overflow-auto">
+          {Data?.map((item, index) => {
             if (item.items.length > 0) {
               return (
-                <div className="h-max bg-[#F2F5FB] flex flex-wrap gap-4 p-4 rounded-lg">
-                  {!clickAll &&
-                  !clickAllm &&
-                  !clickAlls &&
-                  selectedOptions.length > 0
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={
-                            selectedOptions.includes(user.toUpperCase())
-                              ? "#323B4B"
-                              : "#878787"
-                          }
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : mstate || clickAllm
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={user[0] === "m" ? "#323B4B" : "#878787"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : clickAlls || sState
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={user[0] === "s" ? "#323B4B" : "#878787"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : state || clickAll
-                    ? item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={"#323B4B"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))
-                    : item.items?.map((user) => (
-                        <DeviceImage
-                          key={user}
-                          bcolor={"#878787"}
-                          deivceId={user}
-                          mobility={user[0]}
-                        />
-                      ))}
+                <div
+                  className="h-max bg-[#F2F5FB] flex flex-wrap gap-4 p-4 rounded-lg"
+                  key={index}
+                >
+                  {item.items?.map((user) => (
+                    <DeviceImage
+                      key={user}
+                      bcolor={"#323B4B"}
+                      deivceId={user}
+                      mobility={user[0]}
+                    />
+                  ))}
                 </div>
               );
             }
           })}
         </div>
       </div>
-      <div className="w-[80%] flex flex-row justify-between items-center mb-[2%] mt-[2%]">
-          <button className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg" onClick={previousProgress}>Back</button>
-          <button className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg" onClick={nextProgress}>Continue</button>
+      <div className="w-[80%] fixed bottom-0 flex flex-row justify-between items-center mb-[2%] mt-[2%]">
+        <button
+          className="bg-[#DFDFDF] px-4 py-2 text-[#616161] font-semibold rounded-lg"
+          onClick={() => navigate("/select-dates")}
+        >
+          Back
+        </button>
+        <button
+          className="bg-[#323B4B] px-4 py-2 text-white font-semibold rounded-lg"
+          onClick={() => {
+            if (inputRef.current.value.length > 0) {
+              navigate("/select-datatype");
+              dispatch(setDeviceSelected(inputRef.current.value));
+              dispatch(setDevicesList(devices));
+            } else {
+              showNotify();
+            }
+          }}
+        >
+          Continue
+        </button>
       </div>
-    </>
+      <ToastContainer position="top-right" closeOnClick autoClose={false} />
+    </div>
   );
 };
 

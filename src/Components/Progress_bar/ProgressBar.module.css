@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     margin-top: 3%;
-    counter-reset: steps;
+    counter-reset: steps 6;
     z-index: 10;
     margin-top: 8%;
 }
@@ -13,12 +13,13 @@ li{
     display: inline-block;
     width: 200px;
     text-align: center;
-    position: relative
+    position: relative;
+    color:rgb(194, 193, 193)
 }
 
 li:before{
     content: counter(steps);
-    counter-increment: steps;
+    counter-increment: steps -1;
     display: block;
     width: 40px;
     height: 40px;
@@ -27,7 +28,7 @@ li:before{
     text-align: center;
     border-radius: 50%;
     line-height: 35px;
-    outline: 4px inset red;
+    outline: 4px inset rgb(194, 193, 193);
     z-index: 10;
     background-color: white;
     color: black;
@@ -42,25 +43,31 @@ li:after{
     right: 50%;
     bottom: 60%;
     z-index: -10;
+    transform: rotate(180deg);
 }
 
-li:first-child:after{
+li:last-child:after{
     content: none;
 }
 
 li.active{
-    color: green;
-}
-
-li.active + li:after{
-    background-color: green;
-    color: green;
+    color: black;
 }
 
 li.active::after{
-    background-color: green;
-    color: green;
+    background-color: #75f85e;
 }
+ul > li.active ~ li:after{
+    background-color: #75f85e;
+    color:green;
+}
+ul > li.active ~ li:before{
+    outline: 4px inset #75f85e;
+}
+ul > li.active ~ li{
+    color:green;
+}
+
 
 
 
