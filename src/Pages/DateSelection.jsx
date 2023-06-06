@@ -164,9 +164,14 @@ function DateSelection() {
       const st = Date.parse(startDate);
       const et = Date.parse(endDate);
       console.log(Option);
+      const token=JSON.parse(sessionStorage.getItem("token"))
       const deviceStats = await axios.get(
-        `http://127.0.0.1:8000/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`
-      );
+        `https://bw02.kaatru.org/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`
+      ,{
+        headers:{
+          'x-caas-token':token
+        }
+      });
       dispatch(setCountData(deviceStats.data.data));
       const markersArr = [];
         deviceStats.data.data.map((item) => {
@@ -210,7 +215,15 @@ function DateSelection() {
         setMarkers(markersArr);
       } else {
         // const data = await getMarkers();
-        const dbList = await axios.get("http://127.0.0.1:8000/meta/dbs");
+        console.log(JSON.parse(sessionStorage.getItem("token")))
+        const token=JSON.parse(sessionStorage.getItem("token"))
+        console.log(token)
+        // axios.defaults.headers.common={token:"token"}
+        const dbList = await axios.get("https://bw02.kaatru.org/meta/dbs",{
+          headers:{
+            'x-caas-token':token
+          }
+        });
         console.log(dbList.data.data);
         dbList.data.data.map((item) => {
           setoptions((options) => [...options, item]);

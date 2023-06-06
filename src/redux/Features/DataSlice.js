@@ -66,12 +66,15 @@ export const DataSlice = createSlice({
       state.newRequest.to = action.payload;
     },
     setJobData: (state, action) => {
-      state.newRequest.dataFormat = action.payload.dataFormat;
-      state.newRequest.from = action.payload.from;
-      state.newRequest.to = action.payload.to;
-      state.newRequest.dbName = action.payload.dbName;
-      state.newRequest.deviceSelected = action.payload.deviceSelected;
-      state.newRequest.dataSource = action.payload.dataSource;
+      console.log(action.payload)
+      // state.newRequest.dataFormat = action.payload.dataFormat;
+      state.jobId=action.payload.job_id
+      // state.newRequest.from = action.payload.from;
+      // state.newRequest.to = action.payload.to;
+      // state.newRequest.dbName = action.payload.dbName;
+      // state.newRequest.deviceSelected = action.payload.deviceSelected;
+      // state.newRequest.dataSource = action.payload.dataSource;
+      // state.newRequest.
     },
     // logout:(state,action)=>{
       

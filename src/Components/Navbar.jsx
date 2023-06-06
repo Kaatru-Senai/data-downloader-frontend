@@ -15,6 +15,7 @@ function Navbar() {
     dispatch(setUser(false));
     sessionStorage.removeItem("persistantState");
     sessionStorage.removeItem('user');
+    sessionStorage.removeItem('token');
   }
   return (
     <div className="w-full h-16 flex bg-[#323B4B] justify-between items-center fixed top-0 z-20">

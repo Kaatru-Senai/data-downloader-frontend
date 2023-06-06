@@ -12,8 +12,8 @@ import Axios from "axios";
 import FileDownload from "js-file-download";
 
 function Download() {
-  const jobId=useSelector((state)=>state.data.jobId);
-  console.log(jobId)
+  const jobId = useSelector((state) => state.data.jobId);
+  console.log(jobId);
   const data = useSelector((state) => state.data.newRequest);
   const { rive, RiveComponent } = useRive({
     src: RiveAnimation,
@@ -26,7 +26,8 @@ function Download() {
     onLoop: false,
   });
   const navigate = useNavigate();
-  const [progress,setProgress]=useState(false);
+  const [progress, setProgress] = useState(false);
+  const token=JSON.parse(sessionStorage.getItem("token"))
   const startAnimation = async (count, job_Id) => {
     if (count == 0) {
       let inputs = rive.stateMachineInputs("State machine 1");
@@ -46,22 +47,31 @@ function Download() {
       const Progress = inputs.find((i) => i.name === "Progress");
       console.log(count);
       const timer = setInterval(async () => {
+        
         const getRequest = await axios.get(
-          `http://127.0.0.1:8000/job/status/${job_Id}`
+          `https://bw02.kaatru.org/job/status/${job_Id}`,
+          {
+            headers: {
+              "x-caas-token": token,
+            },
+          }
         );
         Progress.value = getRequest.data.progress;
         if (getRequest.data.progress === 100) {
           setProgress(true);
           clearInterval(timer);
-          setTimeout(()=>{
+          setTimeout(() => {
             Axios({
-              url: `http://127.0.0.1:8000/job/download/${job_Id}`,
+              url: `https://bw02.kaatru.org/job/download/${job_Id}`,
               method: "GET",
-              responseType: "blob", // Important
+              responseType: "blob",
+              headers: {
+                "x-caas-token": token,
+              },
             }).then((response) => {
               FileDownload(response.data, `${job_Id}.zip`);
             });
-          },3000)  
+          }, 6000);
         }
       }, 5000);
       Progress.value = count;
@@ -117,11 +127,15 @@ function Download() {
                 </div>
                 <div className="flex flex-row  justify-between w-full p-1 border-b-2">
                   <p className="font-semibold">Sensors: </p>
-                  <p className="font-normal">{data.deviceSelected.toString().slice(0,10)+"....."}</p>
+                  <p className="font-normal">
+                    {data?.deviceSelected?.toString().slice(0, 10) + "....."}
+                  </p>
                 </div>
                 <div className="flex flex-row justify-between w-full p-1">
                   <p className="font-semibold">Status: </p>
-                  <p className="font-normal">{progress?"Completed":"Pending"}</p>
+                  <p className="font-normal">
+                    {progress ? "Completed" : "Pending"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -157,7 +171,7 @@ export default Download;
 //     if (progress !== 100) {
 //       timer = setInterval(async () => {
 // getRequest = await axios.get(
-//   `http://127.0.0.1:8000/job/status/${job_Id}`
+//   `https://bw02.kaatru.org/job/status/${job_Id}`
 // );
 //         console.log(getRequest.data.progress);
 //         progress = getRequest.data.progress;
@@ -174,7 +188,7 @@ export default Download;
 //       console.log("donwload api");
 //       clearInterval(timer);
 //       Axios({
-//         url: `http://127.0.0.1:8000/job/download/${job_Id}`,
+//         url: `https://bw02.kaatru.org/job/download/${job_Id}`,
 //         method: "GET",
 //         responseType: "blob", // Important
 //       }).then((response) => {
@@ -199,7 +213,7 @@ export default Download;
 //   if (count == 0) {
 //     const st = Date.parse(data.from);
 //     const et = Date.parse(data.to);
-//     const postJob = await axios.post(`http://127.0.0.1:8000/job/`, {
+//     const postJob = await axios.post(`https://bw02.kaatru.org/job/`, {
 //       st: st,
 //       et: et,
 //       cols: data.devices,

@@ -58,13 +58,20 @@ function RequestPage() {
 
   const getDataForJobID = async () => {
     if (backend) {
-      const getAllData = await axios.get(`http://127.0.0.1:8000/job/status/${jobRef.current.value}`);
+      const token=JSON.parse(sessionStorage.getItem("token"))
+      const getAllData = await axios.get(`https://bw02.kaatru.org/job/status/${jobRef.current.value}`,
+        {
+          headers:{
+            'x-caas-token':token
+          }
+        }
+      );
       if (getAllData.status === 500) {
         showNotify();
       } else {
-        console.log(getAllData);
+        console.log(getAllData.data);
         closeModal();
-        dispatch(setJobData(getAllData));
+        dispatch(setJobData(getAllData.data));
         navigate("/download");
       }
     } else {

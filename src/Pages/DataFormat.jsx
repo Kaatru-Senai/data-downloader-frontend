@@ -27,12 +27,17 @@ function DataFormat() {
   const createJob=async()=>{
     const st = Date.parse(data.from);
     const et = Date.parse(data.to);
-    const postJob = await axios.post(`http://127.0.0.1:8000/job/`, {
+    const token=JSON.parse(sessionStorage.getItem("token"))
+    const postJob = await axios.post(`https://bw02.kaatru.org/job/`, {
         st: st,
         et: et,
         cols: data.devices,
         db: data.dbName,
         dt: "a",
+      },{
+        headers:{
+          'x-caas-token':token
+        }
       });
     dispatch(setJobID(postJob.data.job_id));
   }

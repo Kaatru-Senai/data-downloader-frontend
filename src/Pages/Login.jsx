@@ -1,15 +1,48 @@
-import React from "react";
+import React, { useRef } from "react";
 import LoginImage from "../assets/heroImage.svg";
 import kaatruLogo from "../assets/kaatru_logo.svg";
 import userId from "../assets/user_id.svg";
 import password from "../assets/password.svg";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { setUser } from "../redux/Features/DataSlice";
+import { useDispatch } from "react-redux";
+import { ToastContainer, toast } from "react-toastify";
+import axios from "axios";
 
 function Login() {
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
+  const navigate = useNavigate();
+  const emailInput = useRef();
+  const pwdInput = useRef();
+  const dispatch = useDispatch();
+  const showNotify = (msg) => toast.error(msg);
+  const logUser = async () => {
+    console.log(typeof emailInput.current.value);
+    if (
+      emailInput.current.value.length > 0 &&
+      pwdInput.current.value.length > 0
+    ) {
+      try {
+        const isUser = await axios.post("https://bw02.kaatru.org/auth/", {
+          email: emailInput.current.value,
+          pwd: pwdInput.current.value,
+        });
+        if (isUser.status === 200) {
+          console.log(isUser.data.token);
+          dispatch(setUser(true));
+          sessionStorage.setItem("user", true);
+          sessionStorage.setItem("token", JSON.stringify(isUser.data.token));
+          navigate("/select-request");
+        }
+      } catch (err) {
+        showNotify(err.response.data.detail);
+      }
+    } else {
+      if (emailInput.current.value.length === 0)
+        showNotify("Please fill the Email Field!!!");
+      else if (pwdInput.current.value.length === 0)
+        showNotify("Pleaase fill the Password Field!!");
+    }
+  };
   return (
     <div className="min-h-screen flex flex-col">
       <div className="flex flex-row h-auto grow">
@@ -37,29 +70,38 @@ function Login() {
                   type="text"
                   placeholder="User ID"
                   className="w-[80%] bg-[#323b4b] text-white p-2 focus:outline-none border-b-2"
+                  ref={emailInput}
                 />
-                <img src={userId} alt="" className="border-b-2"/>
+                <img src={userId} alt="" className="border-b-2" />
               </div>
               <div className="flex flex-row w-[90%]">
                 <input
                   type="password"
                   placeholder="Password"
                   className="w-[80%] bg-[#323b4b] text-white p-2 focus:outline-none border-b-2"
+                  ref={pwdInput}
                 />
-                <img src={password} alt="" className="border-b-2 "/>
+                <img src={password} alt="" className="border-b-2 " />
               </div>
               <div className="flex w-[90%] flex-col justify-center items-center gap-10">
-              <a href="/forgotPassword" className="text-[#B7B7B7] underline">forgot password ?</a>
-              <button className="bg-[#B5FFB4] w-[40%] py-2 rounded-lg" onClick={()=>{navigate('select-request');dispatch(setUser(true));sessionStorage.setItem("user",true);}}>Login</button>
+                <a href="/forgotPassword" className="text-[#B7B7B7] underline">
+                  forgot password ?
+                </a>
+                <button
+                  className="bg-[#B5FFB4] w-[40%] py-2 rounded-lg"
+                  onClick={logUser}
+                >
+                  Login
+                </button>
+              </div>
             </div>
-            </div>
-            
           </div>
         </div>
         <div className="basis-2/3 flex justify-center items-center">
           <img src={LoginImage} alt="" width={"80%"} height={"90%"} />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
