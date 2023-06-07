@@ -15,3 +15,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .react-datepicker-popper{
   z-index: 1001 !important;
 }
+
+.loading_div{
+    position: absolute;
+    left: 45%;
+    top: 50%;
+    z-index: 10;
+
+}
+

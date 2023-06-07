@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import LoginImage from "../assets/heroImage.svg";
 import kaatruLogo from "../assets/kaatru_logo.svg";
 import userId from "../assets/user_id.svg";
@@ -8,8 +8,11 @@ import { setUser } from "../redux/Features/DataSlice";
 import { useDispatch } from "react-redux";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
 
 function Login() {
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const emailInput = useRef();
   const pwdInput = useRef();
@@ -31,6 +34,7 @@ function Login() {
           dispatch(setUser(true));
           sessionStorage.setItem("user", true);
           sessionStorage.setItem("token", JSON.stringify(isUser.data.token));
+          setIsLoading(false)
           navigate("/select-request");
         }
       } catch (err) {
@@ -45,6 +49,13 @@ function Login() {
   };
   return (
     <div className="min-h-screen flex flex-col">
+      {isLoading && <Box
+        sx={{ display: "flex",flexDirection:'column',justifyContent:'center',alignItems:'center'}}
+        className="loading_div"
+      >
+        <CircularProgress />
+        <p className="text-black ">Logging you in....</p>
+      </Box>}
       <div className="flex flex-row h-auto grow">
         <div
           className="basis-[50%] relative flex flex-col justify-center items-center shadow-[0_35px_60px_35px_rgba(0,0,0,0.3)]"
@@ -89,7 +100,7 @@ function Login() {
                 </a>
                 <button
                   className="bg-[#B5FFB4] w-[40%] py-2 rounded-lg"
-                  onClick={logUser}
+                  onClick={()=>{setIsLoading(true);logUser()}}
                 >
                   Login
                 </button>

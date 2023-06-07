@@ -14,6 +14,12 @@ import {
   getAllMobileDevices,
   getAllStationaryDevices,
 } from "../Mock_Backend/server";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+// import Switch from "react-switch";
 
 const DeviceImage = (props) => {
   return (
@@ -45,6 +51,12 @@ var Data = [
 ];
 
 const DeviceSelection = () => {
+  const [value, setValue] = React.useState('female');
+
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  };
+  console.log(value)
   const showNotify = () => toast("Enter Any one Device to Proceed Further...");
   const backend = useSelector((state) => state.data.backend);
   const countData = useSelector((state) => state.data.countData);
@@ -301,7 +313,22 @@ const DeviceSelection = () => {
               }}
               // value={selectedDevices}
             />
+            
           </div>
+          <FormControl>
+      <RadioGroup
+        row
+        aria-labelledby="demo-row-radio-buttons-group-label"
+        name="row-radio-buttons-group"
+        value={value}
+        onChange={handleChange}
+        className="flex-nowrap"
+      >
+        <FormControlLabel value="a" control={<Radio />} label="A" />
+        <FormControlLabel value="s" control={<Radio />} label="S" />
+        <FormControlLabel value="b" control={<Radio />} label="Both" />
+      </RadioGroup>
+    </FormControl>
           <div className="flex flex-row justify-center items-center gap-4 basis-4/6">
             <div
               style={{

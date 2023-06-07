@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.css-qfz70r-MuiFormGroup-root{
+    flex-wrap: none !important;
+    -webkit-flex-wrap:none !important;
+  }
