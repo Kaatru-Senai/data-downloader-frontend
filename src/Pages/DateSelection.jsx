@@ -166,7 +166,7 @@ function DateSelection() {
       console.log(Option);
       const token=JSON.parse(sessionStorage.getItem("token"))
       const deviceStats = await axios.get(
-        `https://bw02.kaatru.org/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`
+        `http://127.0.0.1:8000/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`
       ,{
         headers:{
           'x-caas-token':token
@@ -219,7 +219,7 @@ function DateSelection() {
         const token=JSON.parse(sessionStorage.getItem("token"))
         console.log(token)
         // axios.defaults.headers.common={token:"token"}
-        const dbList = await axios.get("https://bw02.kaatru.org/meta/dbs",{
+        const dbList = await axios.get("http://127.0.0.1:8000/meta/dbs",{
           headers:{
             'x-caas-token':token
           }

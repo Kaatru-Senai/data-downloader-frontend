@@ -28,7 +28,7 @@ function DataFormat() {
     const st = Date.parse(data.from);
     const et = Date.parse(data.to);
     const token=JSON.parse(sessionStorage.getItem("token"))
-    const postJob = await axios.post(`https://bw02.kaatru.org/job/`, {
+    const postJob = await axios.post(`http://127.0.0.1:8000/job/`, {
         st: st,
         et: et,
         cols: data.devices,

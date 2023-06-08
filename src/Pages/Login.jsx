@@ -25,7 +25,7 @@ function Login() {
       pwdInput.current.value.length > 0
     ) {
       try {
-        const isUser = await axios.post("https://bw02.kaatru.org/auth/", {
+        const isUser = await axios.post("http://127.0.0.1:8000/auth/", {
           email: emailInput.current.value,
           pwd: pwdInput.current.value,
         });
