@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar";
 // import ProgressBar from "../Components/Progress_bar/ProgressBar";
 import { useRive, Layout, Fit, Alignment } from "@rive-app/react-canvas";
-import RiveAnimation from "../assets/liquid_download.riv";
+// import RiveAnimation from "../assets/liquid_download.riv";
 import { useSelector } from "react-redux";
 // import { getFile } from "../Mock_Backend/server";
 import axios from "axios";
@@ -16,7 +16,8 @@ function Download() {
   console.log(jobId);
   const data = useSelector((state) => state.data.newRequest);
   const { rive, RiveComponent } = useRive({
-    src: RiveAnimation,
+    // eslint-disable-next-line no-undef
+    src: `${process.env.PUBLIC_URL}/liquid_download.riv`,
     layout: new Layout({
       fit: Fit.Cover,
       alignment: Alignment.Center,
