@@ -24,9 +24,9 @@ function MapView() {
         console.log(data);
         setData(data);
       }
-      else{
-        countData
-      }
+      // else{
+      //   countData
+      // }
     }
     getData();
   }, []);
