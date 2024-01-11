@@ -43,10 +43,10 @@ var Data = [
 ];
 
 function DateSelection() {
-  const [value,setValue]=useState([]);
-  console.log(value)
-  const selectRef=useRef();
-  console.log(selectRef)
+  const [value, setValue] = useState([]);
+  console.log(value);
+  const selectRef = useRef();
+  console.log(selectRef);
   const [isCheck, setIsCheck] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [options, setoptions] = useState([]);
@@ -55,7 +55,7 @@ function DateSelection() {
   const toDate = useSelector((state) => state.data.newRequest.to);
   const showNotify = () =>
     toast("Select the Database and From and To Dates...");
-  const [colourOptions,setColorOptions] = useState()
+  const [colourOptions, setColorOptions] = useState();
   const backend = useSelector((state) => state.data.backend);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -69,89 +69,113 @@ function DateSelection() {
   );
   const [markers, setMarkers] = useState();
   const [devices, setDevices] = useState();
-  const [devicesArr, setDevicesArr] = useState();
+  const [devicesArr] = useState();
   const [allDevices, setAllDevices] = useState(false);
-
-  //get the devices array list
-  console.log(devicesArr);
   const validateConvert = (data) => {
     data = data.toUpperCase();
-    data = data.replace(" ", "");
+    data.replace(" ", "");
     let arr = data.split(",");
-    console.log(arr);
-    console.log(data);
     var res = "";
     for (let d of arr) {
-      if (d.includes("-")) {
-        let temp = d.split("-");
-        var [x, y] = temp;
-
-        if (x[0] === y[0] || (x[1] === "M" && y[1] === "M")) {
-          var from, to;
-
-          if (x[1] === "M") {
-            from = x.split(x[1])[1];
-            to = y.split(y[1])[1];
-          } else {
-            from = x.split(x[0])[1];
-            to = y.split(y[0])[1];
-          }
-          from = parseInt(from);
-          to = parseInt(to);
-
-          if (!!from && !!to && x[1] === "M") {
-            if (from > to) {
-              [from, to] = [to, from];
-            }
-            for (var i = from; i <= to; i++) {
-              res += x[0] + x[1] + `${i},`;
-            }
-          } else if (!!from && !!to) {
-            if (from > to) {
-              [from, to] = [to, from];
-            }
-            for (var j = from; j <= to; j++) {
-              res += x[0] + `${j},`;
-            }
-          } else {
-            return false;
-          }
-        } else {
-          return false;
-        }
-      } else {
-        // console.log(d)
-        if (
-          (d[0] === "M" || d[0] === "S") &&
-          !!parseInt(d.slice(1, d.length))
-        ) {
-          res += d[0] + `${parseInt(d.slice(1, d.length))},`;
-        } else if (d[1] === "M" && !!parseInt(d.slice(2, d.length))) {
-          res += d[0] + d[1] + `${parseInt(d.slice(2, d.length))},`;
-        } else {
-          return false;
+      if(d.includes("-")){
+        let temp = d.split('-')
+        var [x,y] = temp;
+        console.log(x,y)
+        let start = x.split(/(\d.*)/).filter(Boolean);
+        let end = y.split(/(\d.*)/).filter(Boolean);
+        console.log(start);
+        console.log(end);
+        for(let i=start[1];i<=end[1];i++){
+          res += start[0] + i +',';
         }
       }
+      else{
+        res += d+',';
+      }
+      console.log(res)
     }
-    // res.map()
-    // Data=[res];
-    res = res.slice(0, res.length - 1);
-    var array = res.split(",");
-    setDevicesArr(array);
-    array.forEach((item) => {
-      if (/S/.test(item)) {
-        if (!Data[0].items?.includes(item.toString()))
-          Data[0].items.push(item.toString());
-      } else if (/^[M]\d/.test(item)) {
-        if (!Data[1].items?.includes(item.toString())) Data[1].items.push(item);
-      } else if (/^LM/.test(item)) {
-        if (!Data[2].items?.includes(item.toString())) Data[2].items.push(item);
-      } else if (/^RM/.test(item)) {
-        if (!Data[3].items?.includes(item.toString())) Data[3].items.push(item);
-      }
-    });
-    return res;
+    // const filteredResult = devices?.filter((item)=>{
+    //   item.device.includes('')
+    // })
   };
+
+  //get the devices array list
+  // console.log(devicesArr);
+  // const validateConvert = (data) => {
+  //   data = data.toUpperCase();
+  //   data = data.replace(" ", "");
+  //   let arr = data.split(",");
+  //   var res = "";
+  //   for (let d of arr) {
+  //     if (d.includes("-")) {
+  //       let temp = d.split("-");
+  //       var [x, y] = temp;
+  //       if (x[0] === y[0] || (x[1] === "M" && y[1] === "M")) {
+  //         var from, to;
+  //         if (x[1] === "M") {
+  //           from = x.split(x[1])[1];
+  //           to = y.split(y[1])[1];
+  //         } else {
+  //           from = x.split(x[0])[1];
+  //           to = y.split(y[0])[1];
+  //         }
+  //         from = parseInt(from);
+  //         to = parseInt(to);
+
+  //         if (!!from && !!to && x[1] === "M") {
+  //           if (from > to) {
+  //             [from, to] = [to, from];
+  //           }
+  //           for (var i = from; i <= to; i++) {
+  //             res += x[0] + x[1] + `${i},`;
+  //           }
+  //         } else if (!!from && !!to) {
+  //           if (from > to) {
+  //             [from, to] = [to, from];
+  //           }
+  //           for (var j = from; j <= to; j++) {
+  //             res += x[0] + `${j},`;
+  //           }
+  //         } else {
+  //           return false;
+  //         }
+  //       } else {
+  //         return false;
+  //       }
+  //     } else {
+  //       // console.log(d)
+  //       if (
+  //         (d[0] === "M" || d[0] === "S") &&
+  //         !!parseInt(d.slice(1, d.length))
+  //       ) {
+  //         res += d[0] + `${parseInt(d.slice(1, d.length))},`;
+  //       } else if (d[1] === "M" && !!parseInt(d.slice(2, d.length))) {
+  //         res += d[0] + d[1] + `${parseInt(d.slice(2, d.length))},`;
+  //       } else {
+  //         return false;
+  //       }
+  //     }
+  //   }
+  //   // res.map()
+  //   // Data=[res];
+  //   res = res.slice(0, res.length - 1);
+  //   var array = res.split(",");
+  //   console.log(array)
+  //   setDevicesArr(array);
+  //   array.forEach((item) => {
+  //     if (/S/.test(item)) {
+  //       if (!Data[0].items?.includes(item.toString()))
+  //         Data[0].items.push(item.toString());
+  //     } else if (/^[M]\d/.test(item)) {
+  //       if (!Data[1].items?.includes(item.toString())) Data[1].items.push(item);
+  //     } else if (/^LM/.test(item)) {
+  //       if (!Data[2].items?.includes(item.toString())) Data[2].items.push(item);
+  //     } else if (/^RM/.test(item)) {
+  //       if (!Data[3].items?.includes(item.toString())) Data[3].items.push(item);
+  //     }
+  //   });
+  //   return res;
+  // };
   console.log(devices);
   const getData = async () => {
     setAllDevices(true);
@@ -164,28 +188,33 @@ function DateSelection() {
       const st = Date.parse(startDate);
       const et = Date.parse(endDate);
       console.log(Option);
-      const token=JSON.parse(sessionStorage.getItem("token"))
+      const token = JSON.parse(sessionStorage.getItem("token"));
       const deviceStats = await axios.get(
-        `http://127.0.0.1:8000/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`
-      ,{
-        headers:{
-          'x-caas-token':token
+        `http://bw02.kaatru.org/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`,
+        {
+          headers: {
+            "x-caas-token": token,
+          },
         }
-      });
+      );
       dispatch(setCountData(deviceStats.data.data));
       const markersArr = [];
-        deviceStats.data.data.map((item) => {
-          if(item.geo.length>0 && item.geo[0].lat!==undefined && item.geo[0].lon!==undefined)
-            markersArr.push([item.geo[0]?.lat, item.geo[0]?.lon]);
-        });
-        console.log(markersArr);
-        setMarkers(markersArr);
-      const deviceOptions=[]
-      deviceStats.data.data.map((item)=>{
-        deviceOptions.push({value:item.collection,label:item.collection})
-      })
+      deviceStats.data.data.map((item) => {
+        if (
+          item.geo.length > 0 &&
+          item.geo[0].lat !== undefined &&
+          item.geo[0].lon !== undefined
+        )
+          markersArr.push([item.geo[0]?.lat, item.geo[0]?.lon]);
+      });
+      console.log(markersArr);
+      setMarkers(markersArr);
+      const deviceOptions = [];
+      deviceStats.data.data.map((item) => {
+        deviceOptions.push({ value: item.collection, label: item.collection });
+      });
       console.log(deviceOptions);
-      setColorOptions(deviceOptions)
+      setColorOptions(deviceOptions);
       let obj = [];
       deviceStats.data.data.map((item) => {
         obj.push({ device: item.collection, count: item.count });
@@ -215,14 +244,14 @@ function DateSelection() {
         setMarkers(markersArr);
       } else {
         // const data = await getMarkers();
-        console.log(JSON.parse(sessionStorage.getItem("token")))
-        const token=JSON.parse(sessionStorage.getItem("token"))
-        console.log(token)
+        console.log(JSON.parse(sessionStorage.getItem("token")));
+        const token = JSON.parse(sessionStorage.getItem("token"));
+        console.log(token);
         // axios.defaults.headers.common={token:"token"}
-        const dbList = await axios.get("http://127.0.0.1:8000/meta/dbs",{
-          headers:{
-            'x-caas-token':token
-          }
+        const dbList = await axios.get("http://bw02.kaatru.org/meta/dbs", {
+          headers: {
+            "x-caas-token": token,
+          },
         });
         console.log(dbList.data.data);
         dbList.data.data.map((item) => {
@@ -392,7 +421,8 @@ function DateSelection() {
                   className="basic-multi-select"
                   classNamePrefix="select"
                   value={value}
-                  onChange={(e)=>setValue(e)}
+                  onChange={(e) => setValue(e)}
+                  placeholder="Select"
                 />
               </div>
             </div>
@@ -412,7 +442,12 @@ function DateSelection() {
                     <div
                       className="h-24 bg-[#323b4b] rounded-lg flex justify-center items-center flex-col text-white mr-2"
                       key={item.device}
-                      onClick={()=>setValue((value)=>[...value,{value:item.device,label:item.device}])}
+                      onClick={() =>
+                        setValue((value) => [
+                          ...value,
+                          { value: item.device, label: item.device },
+                        ])
+                      }
                     >
                       <div className="flex flex-col justify-center items-start">
                         <p className="text-left mr-8">{item.device}</p>
@@ -464,11 +499,12 @@ function DateSelection() {
               Option !== undefined
             ) {
               getData();
-              let str="";
-              value.map((item)=>{
-                str=str+item.value+',';
-              })
-              str=str.substring(0,str.length-1)
+              let str = "";
+              value.map((item) => {
+                str = str + item.value.slice(0, -1) + ",";
+              });
+              str = str.substring(0, str.length - 1);
+              console.log("the value of ", str);
               dispatch(setDeviceSelected(str));
               navigate("/select-devices");
             } else {

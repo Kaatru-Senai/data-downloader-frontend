@@ -8,7 +8,7 @@ import DatabaseInput from './Pages/DatabaseInput';
 import Download from './Pages/Download';
 import DataSource from './Pages/DataSource';
 import DeviceSelection from './Pages/DeviceSelection';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import DataInfo from './Components/DataInfo';
 import History from './Pages/History';
 import DateSelection from './Pages/DateSelection';
@@ -17,7 +17,7 @@ import MapView from './Pages/MapView';
 // import JobInputPage from './Pages/JobInputPage';
 
 function App() {
-  const isUser=useSelector((state)=>state.data.isUser);
+  const isUser=true;
   console.log(isUser);
   return (
     <div className="App">

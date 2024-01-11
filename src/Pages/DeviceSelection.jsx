@@ -432,6 +432,7 @@ const DeviceSelection = () => {
           onClick={() => {
             if (inputRef.current.value.length > 0) {
               navigate("/select-datatype");
+              console.log("the value of selected devices input is ",inputRef.current.value)
               dispatch(setDeviceSelected(inputRef.current.value));
               dispatch(setDevicesList(devices));
             } else {

@@ -50,7 +50,7 @@ function Download() {
       const timer = setInterval(async () => {
         
         const getRequest = await axios.get(
-          `http://127.0.0.1:8000/job/status/${job_Id}`,
+          `http://bw02.kaatru.org/job/status/${job_Id}`,
           {
             headers: {
               "x-caas-token": token,
@@ -63,7 +63,7 @@ function Download() {
           clearInterval(timer);
           setTimeout(() => {
             Axios({
-              url: `http://127.0.0.1:8000/job/download/${job_Id}`,
+              url: `http://bw02.kaatru.org/job/download/${job_Id}`,
               method: "GET",
               responseType: "blob",
               headers: {
@@ -172,7 +172,7 @@ export default Download;
 //     if (progress !== 100) {
 //       timer = setInterval(async () => {
 // getRequest = await axios.get(
-//   `http://127.0.0.1:8000/job/status/${job_Id}`
+//   `http://bw02.kaatru.org/job/status/${job_Id}`
 // );
 //         console.log(getRequest.data.progress);
 //         progress = getRequest.data.progress;
@@ -189,7 +189,7 @@ export default Download;
 //       console.log("donwload api");
 //       clearInterval(timer);
 //       Axios({
-//         url: `http://127.0.0.1:8000/job/download/${job_Id}`,
+//         url: `http://bw02.kaatru.org/job/download/${job_Id}`,
 //         method: "GET",
 //         responseType: "blob", // Important
 //       }).then((response) => {
@@ -214,7 +214,7 @@ export default Download;
 //   if (count == 0) {
 //     const st = Date.parse(data.from);
 //     const et = Date.parse(data.to);
-//     const postJob = await axios.post(`http://127.0.0.1:8000/job/`, {
+//     const postJob = await axios.post(`http://bw02.kaatru.org/job/`, {
 //       st: st,
 //       et: et,
 //       cols: data.devices,
