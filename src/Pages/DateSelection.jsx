@@ -69,13 +69,16 @@ function DateSelection() {
   );
   const [markers, setMarkers] = useState();
   const [devices, setDevices] = useState();
-  const [devicesArr] = useState();
+  // const [filteredDevices,setFilteredDevices]=useState();
+  const [devicesArr,setDevicesArr] = useState();
   const [allDevices, setAllDevices] = useState(false);
   const validateConvert = (data) => {
     data = data.toUpperCase();
     data.replace(" ", "");
     let arr = data.split(",");
     var res = "";
+    // let filteredArr = [];
+    var devicesArray = [];
     for (let d of arr) {
       if(d.includes("-")){
         let temp = d.split('-')
@@ -87,13 +90,28 @@ function DateSelection() {
         console.log(end);
         for(let i=start[1];i<=end[1];i++){
           res += start[0] + i +',';
+          devicesArray.push(start[0]+i+'S');
         }
       }
       else{
         res += d+',';
+        devicesArray.push(d+'S');
       }
       console.log(res)
+      console.log(devicesArray)
+      setDevicesArr(devicesArray)
+      // filteredArr = devices.filter((item)=>devicesArr.includes(item.device))
+      // console.log(filteredArr)
+      // setDevices(filteredArr);
+
     }
+    // setDevices(filteredArr)
+    // if(filteredArr.length > 0 ){
+    //   console.log(filteredArr)
+    //   // setDevices(filteredArr);
+    // }
+    // setDevices(filteredArr);
+    console.log(devices)
     // const filteredResult = devices?.filter((item)=>{
     //   item.device.includes('')
     // })
