@@ -28,12 +28,12 @@ function DataFormat() {
     const st = Date.parse(data.from);
     const et = Date.parse(data.to);
     const token=JSON.parse(sessionStorage.getItem("token"))
-    const postJob = await axios.post(`http://bw02.kaatru.org/job/`, {
+    const postJob = await axios.post(`https://bw02.kaatru.org/job/`, {
         st: st,
         et: et,
         cols: data.deviceSelected,
         db: data.dbName,
-        dt: "a",
+        dt: "s",
       },{
         headers:{
           'x-caas-token':token

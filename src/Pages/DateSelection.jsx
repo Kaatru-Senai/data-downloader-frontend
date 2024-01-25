@@ -208,7 +208,7 @@ function DateSelection() {
       console.log(Option);
       const token = JSON.parse(sessionStorage.getItem("token"));
       const deviceStats = await axios.get(
-        `http://bw02.kaatru.org/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`,
+        `https://bw02.kaatru.org/meta/dbs/${Option.value}/cols/ts?st=${st}&et=${et}`,
         {
           headers: {
             "x-caas-token": token,
@@ -266,7 +266,7 @@ function DateSelection() {
         const token = JSON.parse(sessionStorage.getItem("token"));
         console.log(token);
         // axios.defaults.headers.common={token:"token"}
-        const dbList = await axios.get("http://bw02.kaatru.org/meta/dbs", {
+        const dbList = await axios.get("https://bw02.kaatru.org/meta/dbs", {
           headers: {
             "x-caas-token": token,
           },
@@ -485,9 +485,15 @@ function DateSelection() {
                         <div
                           className="h-24 bg-[#323b4b] rounded-lg flex justify-center items-center flex-col text-white mr-2"
                           key={item.device}
+                          onClick={() =>
+                            setValue((value) => [
+                              ...value,
+                              { value: item.device, label: item.device },
+                            ])
+                          }
                         >
                           <div className="flex flex-col justify-center items-start">
-                            <p className="text-left mr-8">{item.device}</p>
+                            <p className="text-left mr-8">{item.device.slice(0,-1)}</p>
                             <p className="text-xl font-bold">
                               {millify(item.count)}
                             </p>

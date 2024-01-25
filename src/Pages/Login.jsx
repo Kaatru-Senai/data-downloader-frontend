@@ -25,7 +25,7 @@ function Login() {
       pwdInput.current.value.length > 0
     ) {
       try {
-        const isUser = await axios.post("http://bw02.kaatru.org/auth/", {
+        const isUser = await axios.post("https://bw02.kaatru.org/auth/", {
           email: emailInput.current.value,
           pwd: pwdInput.current.value,
         });
@@ -38,6 +38,7 @@ function Login() {
           navigate("/select-request");
         }
       } catch (err) {
+        setIsLoading(false)
         showNotify(err.response.data.detail);
       }
     } else {
